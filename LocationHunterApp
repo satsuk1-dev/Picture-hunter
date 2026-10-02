@@ -1,0 +1,19 @@
+//
+//  LocationHunterApp.swift
+//  LocationHunter
+//
+//  Created by cmStudent on 2026/09/28.
+//
+
+import SwiftUI
+
+@main
+struct LocationHunterApp: App {
+    @StateObject private var langManager = LanguageManager()
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .environmentObject(langManager)
+        }
+    }
+}
