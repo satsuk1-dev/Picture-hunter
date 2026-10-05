@@ -11,9 +11,9 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		7F2C46A7307340BD00A3BA9E /* Picture hunter */ = {
+		7F2C46A7307340BD00A3BA9E /* Picture-hunter */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "Picture hunter";
+			path = "Picture-hunter";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -32,7 +32,7 @@
 		7F2C469C307340BD00A3BA9E = {
 			isa = PBXGroup;
 			children = (
-				7F2C46A7307340BD00A3BA9E /* Picture hunter */,
+				7F2C46A7307340BD00A3BA9E /* Picture-hunter */,
 				7F2C46A6307340BD00A3BA9E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -61,7 +61,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				7F2C46A7307340BD00A3BA9E /* Picture hunter */,
+				7F2C46A7307340BD00A3BA9E /* Picture-hunter */,
 			);
 			name = "Picture hunter";
 			packageProductDependencies = (
@@ -85,7 +85,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 7F2C46A0307340BD00A3BA9E /* Build configuration list for PBXProject "Picture hunter" */;
+			buildConfigurationList = 7F2C46A0307340BD00A3BA9E /* Build configuration list for PBXProject "Picture-hunter" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -313,7 +313,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7F2C46A0307340BD00A3BA9E /* Build configuration list for PBXProject "Picture hunter" */ = {
+		7F2C46A0307340BD00A3BA9E /* Build configuration list for PBXProject "Picture-hunter" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7F2C46AE307340BD00A3BA9E /* Debug */,
