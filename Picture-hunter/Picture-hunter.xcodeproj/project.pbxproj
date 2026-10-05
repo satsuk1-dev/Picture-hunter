@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		7F2C46A5307340BD00A3BA9E /* Picture hunter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Picture hunter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F2C46A5307340BD00A3BA9E /* Picture hunter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "Picture hunter.app"; path = "/Users/cmstudent/Desktop/Picture-hunter/Picture-hunter/build/Debug-iphoneos/Picture hunter.app"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -33,16 +33,7 @@
 			isa = PBXGroup;
 			children = (
 				7F2C46A7307340BD00A3BA9E /* Picture-hunter */,
-				7F2C46A6307340BD00A3BA9E /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		7F2C46A6307340BD00A3BA9E /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				7F2C46A5307340BD00A3BA9E /* Picture hunter.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -95,7 +86,7 @@
 			mainGroup = 7F2C469C307340BD00A3BA9E;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 7F2C46A6307340BD00A3BA9E /* Products */;
+			productRefGroup = 7F2C469C307340BD00A3BA9E;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (

@@ -8,17 +8,127 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var langManager: LanguageManager
+    
+    // Binding pour revenir au Splash Screen
+    @Binding var isFinishedSplash: Bool
+    
+    @State private var selectedDifficulty: Difficulty = .medium
+    @State private var showGameScreen = false
+    @State private var showRankingScreen = false
+    @State private var showSettingsScreen = false
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            ZStack {
+                LinearGradient(
+                    gradient: Gradient(colors: [Color.purple.opacity(0.8), Color.blue.opacity(0.8)]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+                
+                VStack(spacing: 35) {
+                    
+                    // Bouton de retour vers l'écran d'accueil en haut à gauche
+                    HStack {
+                        Button(action: {
+                            withAnimation(.easeInOut) {
+                                isFinishedSplash = false
+                            }
+                        }) {
+                            Image(systemName: "house.fill")
+                                .font(.title2)
+                                .foregroundColor(.white)
+                                .padding(12)
+                                .background(Color.white.opacity(0.2))
+                                .clipShape(Circle())
+                        }
+                        Spacer()
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 10)
+                    
+                    Spacer()
+                    
+                    VStack(spacing: 12) {
+                        Image(systemName: "camera.macro")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 80, height: 80)
+                            .foregroundColor(.white)
+                        
+                        Text(langManager.text(for: "app_title"))
+                            .font(.system(size: 36, weight: .black, design: .rounded))
+                            .foregroundColor(.white)
+                        
+                        Text(langManager.text(for: "subtitle"))
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white.opacity(0.9))
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 6)
+                            .background(Capsule().fill(Color.white.opacity(0.2)))
+                    }
+                    
+                    Spacer()
+                    
+                    VStack(spacing: 18) {
+                        Button(action: { showGameScreen = true }) {
+                            HStack {
+                                Image(systemName: "play.fill")
+                                Text(langManager.text(for: "start")).fontWeight(.bold)
+                            }
+                            .font(.title2)
+                            .foregroundColor(.purple)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 18)
+                            .background(Color.white)
+                            .cornerRadius(20)
+                        }
+                        
+                        Button(action: { showRankingScreen = true }) {
+                            HStack {
+                                Image(systemName: "trophy.fill")
+                                Text(langManager.text(for: "ranking")).fontWeight(.bold)
+                            }
+                            .font(.title3)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16)
+                            .background(Color.white.opacity(0.25))
+                            .cornerRadius(20)
+                        }
+                        
+                        Button(action: { showSettingsScreen = true }) {
+                            HStack {
+                                Image(systemName: "gearshape.fill")
+                                Text(langManager.text(for: "settings")).fontWeight(.bold)
+                            }
+                            .font(.title3)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16)
+                            .background(Color.white.opacity(0.25))
+                            .cornerRadius(20)
+                        }
+                    }
+                    .padding(.horizontal, 30)
+                    
+                    Spacer()
+                }
+            }
+            .sheet(isPresented: $showSettingsScreen) {
+                SettingsView(selectedDifficulty: $selectedDifficulty)
+                    .environmentObject(langManager)
+            }
         }
-        .padding()
     }
 }
 
+// MARK: - Preview
+
 #Preview {
-    ContentView()
+    ContentView(isFinishedSplash: .constant(true))
+        .environmentObject(LanguageManager())
 }
