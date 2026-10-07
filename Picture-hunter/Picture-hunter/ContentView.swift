@@ -1,16 +1,9 @@
-//
-//  ContentView.swift
-//  Picture hunter
-//
-//  Created by cmStudent on 2026/10/05.
-//
-
 import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var langManager: LanguageManager
+    @EnvironmentObject var scoreManager: ScoreManager
     
-    // Binding pour revenir au Splash Screen
     @Binding var isFinishedSplash: Bool
     
     @State private var selectedDifficulty: Difficulty = .medium
@@ -29,8 +22,6 @@ struct ContentView: View {
                 .ignoresSafeArea()
                 
                 VStack(spacing: 35) {
-                    
-                    // Bouton de retour vers l'écran d'accueil en haut à gauche
                     HStack {
                         Button(action: {
                             withAnimation(.easeInOut) {
@@ -118,6 +109,18 @@ struct ContentView: View {
                     Spacer()
                 }
             }
+            // Transition vers GameView lors du clic sur START
+            .navigationDestination(isPresented: $showGameScreen) {
+                GameView()
+                    .environmentObject(langManager)
+            }
+            // Modale de classement (RankingView)
+            .sheet(isPresented: $showRankingScreen) {
+                RankingView()
+                    .environmentObject(langManager)
+                    .environmentObject(scoreManager)
+            }
+            // Modale de réglages
             .sheet(isPresented: $showSettingsScreen) {
                 SettingsView(selectedDifficulty: $selectedDifficulty)
                     .environmentObject(langManager)
@@ -131,4 +134,5 @@ struct ContentView: View {
 #Preview {
     ContentView(isFinishedSplash: .constant(true))
         .environmentObject(LanguageManager())
+        .environmentObject(ScoreManager())
 }

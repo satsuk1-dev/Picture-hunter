@@ -1,10 +1,9 @@
 //
 //  SoundManager.swift
-//  Picture hunter
+//  LocationHunter
 //
-//  Created by cmStudent on 2026/10/05.
+//  Created by cmStudent on 2026/10/02.
 //
-
 
 import SwiftUI
 import AVFoundation

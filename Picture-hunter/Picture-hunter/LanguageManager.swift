@@ -1,10 +1,3 @@
-//
-//  LanguageView.swift
-//  Picture hunter
-//
-//  Created by cmStudent on 2026/10/05.
-//
-
 import SwiftUI
 import Combine
 
@@ -22,7 +15,6 @@ enum Difficulty: String, CaseIterable, Identifiable {
 }
 
 class LanguageManager: ObservableObject {
-    // Le Japonais est désormais la langue principale par défaut
     @Published var selectedLanguage: Language = .japanese
     
     func text(for key: String) -> String {
@@ -35,7 +27,7 @@ class LanguageManager: ObservableObject {
     
     private let japaneseDictionary: [String: String] = [
         "app_title": "PICTURE HUNTER",
-        "subtitle": "学校の文化祭",
+        "subtitle": "日専祭",
         "tap_to_start": "画面をタップしてスタート",
         "start": "スタート",
         "ranking": "ランキング",
@@ -46,7 +38,20 @@ class LanguageManager: ObservableObject {
         "easy": "かんたん",
         "medium": "ふつう",
         "hard": "むずかしい",
-        "close": "閉じる"
+        "close": "閉じる",
+        // In-game
+        "score": "スコア",
+        "no_score": "まだ記録がありません",
+        "pts": "pt",
+        "type_answer": "回答を入力...",
+        "pause": "一時停止",
+        "resume": "再開",
+        "correct": "正解！",
+        "incorrect": "不正解...もう一度！",
+        "enter_name_title": "スコア登録",
+        "enter_name_message": "ランキングに登録するニックネームを入力してください",
+        "name_placeholder": "ニックネーム",
+        "save_button": "登録"
     ]
     
     private let englishDictionary: [String: String] = [
@@ -62,7 +67,21 @@ class LanguageManager: ObservableObject {
         "easy": "Easy",
         "medium": "Medium",
         "hard": "Hard",
-        "close": "Close"
+        "close": "Close",
+        // In-game
+        "score": "Score",
+        "no_score": "No scores yet",
+        "pts": "pts",
+        "type_answer": "Type answer...",
+        "pause": "PAUSE",
+        "resume": "RESUME",
+        "correct": "Correct!",
+        "incorrect": "Incorrect... Try again!",
+        // Name entry
+        "enter_name_title": "Save Score",
+        "enter_name_message": "Enter your nickname for the ranking",
+        "name_placeholder": "Nickname",
+        "save_button": "Save"
     ]
     
     private let myanmarDictionary: [String: String] = [
@@ -78,6 +97,20 @@ class LanguageManager: ObservableObject {
         "easy": "လွယ်ကူသော",
         "medium": "အလယ်အလတ်",
         "hard": "ခက်ခဲသော",
-        "close": "ပိတ်မည်"
+        "close": "ပိတ်မည်",
+        // In-game
+        "score": "ရမှတ်",
+        "no_score": "မှတ်တမ်းမရှိသေးပါ",
+        "pts": "မှတ်",
+        "type_answer": "အဖြေရိုက်ထည့်ပါ...",
+        "pause": "ခေတ္တရပ်မည်",
+        "resume": "ပြန်စမည်",
+        "correct": "မှန်ကန်သည်!",
+        "incorrect": "မှားယွင်းသည်...",
+        // Name entry
+        "enter_name_title": "မှတ်တမ်းသိမ်းမည်",
+        "enter_name_message": "အဆင့်သတ်မှတ်ချက်အတွက် နာမည်ထည့်ပါ",
+        "name_placeholder": "အမည်",
+        "save_button": "သိမ်းမည်"
     ]
 }
