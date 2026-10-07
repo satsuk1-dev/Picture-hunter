@@ -6,6 +6,9 @@ struct GameView: View {
     @EnvironmentObject var scoreManager: ScoreManager
     @Environment(\.dismiss) var dismiss
     
+    // 1. Réception de la catégorie choisie depuis ContentView
+    let category: GameCategory
+    
     @StateObject private var gameModel = GameModel()
     
     @State private var inputAnswer: String = ""
@@ -147,7 +150,8 @@ struct GameView: View {
         .onAppear {
             timeRemaining = 30
             isGameRunning = true
-            gameModel.startGame()
+            // Initialise 3 photos aléatoires pour la catégorie sélectionnée
+            gameModel.setupAndStartGame(category: category)
         }
         .onReceive(timer) { _ in
             guard isGameRunning else { return }
@@ -158,7 +162,14 @@ struct GameView: View {
                 timeRemaining = 0
                 isGameRunning = false
                 gameModel.stopGame()
-                showNameInputDialog = true // Displays the alert as soon as time reaches 0 / 時間が0になったらアラートを表示
+                showNameInputDialog = true // Temps écoulé
+            }
+        }
+        // Écoute la fin de partie (quand les 3 questions sont réussies)
+        .onChange(of: gameModel.isGameOver) { isOver in
+            if isOver {
+                isGameRunning = false
+                showNameInputDialog = true
             }
         }
         .alert(langManager.text(for: "enter_name_title"), isPresented: $showNameInputDialog) {
@@ -183,9 +194,8 @@ struct GameView: View {
         let isCorrect = gameModel.checkAnswer(inputAnswer, language: langManager.selectedLanguage)
         
         if isCorrect {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                 inputAnswer = ""
-                gameModel.nextQuestion()
             }
         } else {
             inputAnswer = ""
@@ -194,7 +204,7 @@ struct GameView: View {
 }
 
 #Preview {
-    GameView()
+    GameView(category: .school)
         .environmentObject(LanguageManager())
         .environmentObject(ScoreManager())
 }

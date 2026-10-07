@@ -39,6 +39,19 @@ class LanguageManager: ObservableObject {
         "medium": "ふつう",
         "hard": "むずかしい",
         "close": "閉じる",
+        
+        // Mode Selection / モード選択
+        "select_mode": "モードを選択",
+        "subtitle_mode": "テーマを選んでゲームをスタート！",
+        "mode_school": "学校",
+        "subtitle_school": "文房具・教室の物",
+        "mode_world": "世界",
+        "subtitle_world": "世界の有名スポット",
+        "mode_japan": "日本",
+        "subtitle_japan": "日本の文化と名所",
+        "mode_halloween": "ハロウィン",
+        "subtitle_halloween": "期間限定イベント",
+        
         // In-game
         "score": "スコア",
         "no_score": "まだ記録がありません",
@@ -68,6 +81,19 @@ class LanguageManager: ObservableObject {
         "medium": "Medium",
         "hard": "Hard",
         "close": "Close",
+        
+        // Mode Selection
+        "select_mode": "Select Game Mode",
+        "subtitle_mode": "Choose a topic to start playing!",
+        "mode_school": "School",
+        "subtitle_school": "Classroom items",
+        "mode_world": "World",
+        "subtitle_world": "Famous landmarks",
+        "mode_japan": "Japan",
+        "subtitle_japan": "Culture & sights",
+        "mode_halloween": "Halloween 🎃",
+        "subtitle_halloween": "Spooky event",
+        
         // In-game
         "score": "Score",
         "no_score": "No scores yet",
@@ -77,6 +103,7 @@ class LanguageManager: ObservableObject {
         "resume": "RESUME",
         "correct": "Correct!",
         "incorrect": "Incorrect... Try again!",
+        
         // Name entry
         "enter_name_title": "Save Score",
         "enter_name_message": "Enter your nickname for the ranking",
@@ -98,6 +125,19 @@ class LanguageManager: ObservableObject {
         "medium": "အလယ်အလတ်",
         "hard": "ခက်ခဲသော",
         "close": "ပိတ်မည်",
+        
+        // Mode Selection
+        "select_mode": "ဂိမ်းမုဒ်ကို ရွေးပါ",
+        "subtitle_mode": "ကစားရန် ခေါင်းစဉ်တစ်ခုကို ရွေးပါ",
+        "mode_school": "ကျောင်း",
+        "subtitle_school": "စာသင်ခန်းသုံးပစ္စည်းများ",
+        "mode_world": "ကမ္ဘာ",
+        "subtitle_world": "ကမ္ဘာကျော်နေရာများ",
+        "mode_japan": "ဂျပန်",
+        "subtitle_japan": "ဂျပန်ယဉ်ကျေးမှုနှင့် နေရာများ",
+        "mode_halloween": "ဟောလိုးဝင်း 🎃",
+        "subtitle_halloween": "သရဲပွဲတော် အထူးမုဒ်",
+        
         // In-game
         "score": "ရမှတ်",
         "no_score": "မှတ်တမ်းမရှိသေးပါ",
@@ -107,6 +147,7 @@ class LanguageManager: ObservableObject {
         "resume": "ပြန်စမည်",
         "correct": "မှန်ကန်သည်!",
         "incorrect": "မှားယွင်းသည်...",
+        
         // Name entry
         "enter_name_title": "မှတ်တမ်းသိမ်းမည်",
         "enter_name_message": "အဆင့်သတ်မှတ်ချက်အတွက် နာမည်ထည့်ပါ",
