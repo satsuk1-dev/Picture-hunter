@@ -166,8 +166,8 @@ struct GameView: View {
             }
         }
         // Écoute la fin de partie (quand les 3 questions sont réussies)
-        .onChange(of: gameModel.isGameOver) { isOver in
-            if isOver {
+        .onChange(of: gameModel.isGameOver) { oldValue, newValue in
+            if newValue {
                 isGameRunning = false
                 showNameInputDialog = true
             }
@@ -208,3 +208,4 @@ struct GameView: View {
         .environmentObject(LanguageManager())
         .environmentObject(ScoreManager())
 }
+
