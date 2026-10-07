@@ -14,110 +14,216 @@ struct ContentView: View {
     @State private var showRankingScreen = false
     @State private var showSettingsScreen = false
     
+    // Animation state
+    @State private var isAnimatingBg = false
+    @State private var appearAnimation = false
+    
     var body: some View {
         NavigationStack {
             ZStack {
-                // Fond principal en dégradé
+                // 🌌 Dynamic modern gradient background / 動的でモダンなグラデーション背景
                 LinearGradient(
-                    gradient: Gradient(colors: [Color.purple.opacity(0.85), Color.blue.opacity(0.85)]),
+                    colors: [
+                        Color(red: 0.1, green: 0.05, blue: 0.25),
+                        Color(red: 0.05, green: 0.15, blue: 0.35)
+                    ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
                 .ignoresSafeArea()
                 
-                VStack(spacing: 25) {
-                    // Header (Bouton Accueil)
+                // ✨ Background glow effects (Glow Orbs) / 背景のグロー効果（グローオーブ）
+                ZStack {
+                    Circle()
+                        .fill(Color.purple.opacity(0.4))
+                        .frame(width: 280, height: 280)
+                        .blur(radius: 80)
+                        .offset(x: isAnimatingBg ? -100 : 100, y: isAnimatingBg ? -150 : -80)
+                    
+                    Circle()
+                        .fill(Color.blue.opacity(0.4))
+                        .frame(width: 300, height: 300)
+                        .blur(radius: 90)
+                        .offset(x: isAnimatingBg ? 120 : -80, y: isAnimatingBg ? 180 : 100)
+                }
+                .onAppear {
+                    withAnimation(.easeInOut(duration: 7.0).repeatForever(autoreverses: true)) {
+                        isAnimatingBg.toggle()
+                    }
+                }
+                
+                VStack(spacing: 0) {
+                    // 🏠 Header (Home Button) / ヘッダー（ホームボタン）
                     HStack {
                         Button(action: {
-                            withAnimation(.easeInOut) {
+                            withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
                                 isFinishedSplash = false
                             }
                         }) {
                             Image(systemName: "house.fill")
-                                .font(.title2)
+                                .font(.title3.weight(.semibold))
                                 .foregroundColor(.white)
                                 .padding(12)
-                                .background(Color.white.opacity(0.2))
-                                .clipShape(Circle())
+                                .background(.white.opacity(0.15), in: Circle())
+                                .overlay(
+                                    Circle().stroke(Color.white.opacity(0.25), lineWidth: 1)
+                                )
+                                .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
                         }
+                        .buttonStyle(ScaleButtonStyle())
+                        
                         Spacer()
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 10)
+                    .padding(.horizontal, 22)
+                    .padding(.top, 12)
                     
                     Spacer()
                     
-                    // Titre principal
-                    VStack(spacing: 12) {
-                        Image(systemName: "camera.macro")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 80, height: 80)
-                            .foregroundColor(.white)
-                            .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
+                    // 📸 Logo & Main title / ロゴとメインタイトル
+                    VStack(spacing: 16) {
+                        ZStack {
+                            Circle()
+                                .fill(
+                                    LinearGradient(
+                                        colors: [.purple, .blue],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .frame(width: 100, height: 100)
+                                .blur(radius: 20)
+                                .opacity(0.7)
+                            
+                            Circle()
+                                .fill(.ultraThinMaterial)
+                                .frame(width: 90, height: 90)
+                                .overlay(
+                                    Circle().stroke(
+                                        LinearGradient(
+                                            colors: [.white.opacity(0.6), .white.opacity(0.1)],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        ),
+                                        lineWidth: 1.5
+                                    )
+                                )
+                            
+                            Image(systemName: "camera.macro")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 44, height: 44)
+                                .foregroundStyle(
+                                    LinearGradient(
+                                        colors: [.white, .cyan.opacity(0.8)],
+                                        startPoint: .top,
+                                        endPoint: .bottom
+                                    )
+                                )
+                                .shadow(color: .white.opacity(0.3), radius: 8)
+                        }
+                        .scaleEffect(appearAnimation ? 1.0 : 0.6)
+                        .opacity(appearAnimation ? 1.0 : 0)
                         
-                        Text(langManager.text(for: "app_title"))
-                            .font(.system(size: 38, weight: .black, design: .rounded))
-                            .foregroundColor(.white)
-                        
-                        Text(langManager.text(for: "subtitle"))
-                            .font(.subheadline)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white.opacity(0.9))
-                            .padding(.horizontal, 18)
-                            .padding(.vertical, 8)
-                            .background(Capsule().fill(Color.white.opacity(0.2)))
+                        VStack(spacing: 8) {
+                            Text(langManager.text(for: "app_title"))
+                                .font(.system(size: 40, weight: .black, design: .rounded))
+                                .foregroundStyle(
+                                    LinearGradient(
+                                        colors: [.white, Color.white.opacity(0.85)],
+                                        startPoint: .top,
+                                        endPoint: .bottom
+                                    )
+                                )
+                                .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 5)
+                            
+                            Text(langManager.text(for: "subtitle"))
+                                .font(.subheadline)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white.opacity(0.9))
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 8)
+                                .background(.white.opacity(0.12), in: Capsule())
+                                .overlay(
+                                    Capsule().stroke(Color.white.opacity(0.2), lineWidth: 1)
+                                )
+                        }
+                        .offset(y: appearAnimation ? 0 : 20)
+                        .opacity(appearAnimation ? 1.0 : 0)
                     }
                     
                     Spacer()
                     
-                    // Menu principal
+                    // 🎮 Main menu / メインメニュー
                     VStack(spacing: 16) {
-                        Button(action: {
-                            showCategoryPicker = true
-                        }) {
-                            HStack {
+                        // Play button / 再生ボタン
+                        Button(action: { showCategoryPicker = true }) {
+                            HStack(spacing: 12) {
                                 Image(systemName: "play.fill")
-                                Text(langManager.text(for: "start")).fontWeight(.black)
+                                    .font(.title2)
+                                Text(langManager.text(for: "start"))
+                                    .font(.system(size: 22, weight: .black, design: .rounded))
                             }
-                            .font(.title2)
-                            .foregroundColor(.purple)
+                            .foregroundColor(Color(red: 0.15, green: 0.05, blue: 0.3))
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 18)
-                            .background(Color.white)
-                            .cornerRadius(22)
-                            .shadow(color: .black.opacity(0.15), radius: 8, x: 0, y: 4)
+                            .background(
+                                LinearGradient(colors: [.white, Color(white: 0.92)], startPoint: .top, endPoint: .bottom)
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+                            .shadow(color: .purple.opacity(0.35), radius: 15, x: 0, y: 8)
                         }
+                        .buttonStyle(ScaleButtonStyle())
                         
+                        // Ranking button / ランキングボタン
                         Button(action: { showRankingScreen = true }) {
-                            HStack {
+                            HStack(spacing: 10) {
                                 Image(systemName: "trophy.fill")
-                                Text(langManager.text(for: "ranking")).fontWeight(.bold)
+                                    .font(.title3)
+                                    .foregroundColor(.yellow)
+                                Text(langManager.text(for: "ranking"))
+                                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                                    .foregroundColor(.white)
                             }
-                            .font(.title3)
-                            .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
-                            .background(Color.white.opacity(0.25))
-                            .cornerRadius(20)
+                            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 22, style: .continuous)
+                                    .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                            )
                         }
+                        .buttonStyle(ScaleButtonStyle())
                         
+                        // Settings button / 設定ボタン
                         Button(action: { showSettingsScreen = true }) {
-                            HStack {
+                            HStack(spacing: 10) {
                                 Image(systemName: "gearshape.fill")
-                                Text(langManager.text(for: "settings")).fontWeight(.bold)
+                                    .font(.title3)
+                                    .foregroundColor(.white.opacity(0.8))
+                                Text(langManager.text(for: "settings"))
+                                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                                    .foregroundColor(.white)
                             }
-                            .font(.title3)
-                            .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
-                            .background(Color.white.opacity(0.25))
-                            .cornerRadius(20)
+                            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 22, style: .continuous)
+                                    .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                            )
                         }
+                        .buttonStyle(ScaleButtonStyle())
                     }
-                    .padding(.horizontal, 30)
+                    .padding(.horizontal, 28)
+                    .offset(y: appearAnimation ? 0 : 30)
+                    .opacity(appearAnimation ? 1.0 : 0)
                     
                     Spacer()
+                }
+            }
+            .onAppear {
+                withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
+                    appearAnimation = true
                 }
             }
             .navigationDestination(isPresented: $showGameScreen) {
@@ -125,21 +231,21 @@ struct ContentView: View {
                     .environmentObject(langManager)
                     .environmentObject(scoreManager)
             }
-            // Modale recadrée sur les 3 cartes
+            // Mode selection modal / モード選択モーダル
             .sheet(isPresented: $showCategoryPicker) {
                 CategorySelectionSheet(
                     selectedCategory: $selectedCategory,
                     onSelect: { category in
                         selectedCategory = category
                         showCategoryPicker = false
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                             showGameScreen = true
                         }
                     }
                 )
                 .environmentObject(langManager)
-                .presentationDetents([.height(380)])
-                .presentationCornerRadius(32)
+                .presentationDetents([.height(390)])
+                .presentationCornerRadius(36)
             }
             .sheet(isPresented: $showRankingScreen) {
                 RankingView()
@@ -154,7 +260,7 @@ struct ContentView: View {
     }
 }
 
-// MARK: - Modale de Sélection Trilingue du Mode
+// MARK: - Trilingual Mode Selection Modal / 3言語対応のモード選択モーダル
 struct CategorySelectionSheet: View {
     @EnvironmentObject var langManager: LanguageManager
     @Binding var selectedCategory: GameCategory
@@ -162,9 +268,8 @@ struct CategorySelectionSheet: View {
     
     var body: some View {
         ZStack {
-            // Fond sombre Apple Premium
             LinearGradient(
-                colors: [Color(white: 0.12), Color(white: 0.08)],
+                colors: [Color(red: 0.12, green: 0.10, blue: 0.18), Color(red: 0.07, green: 0.06, blue: 0.10)],
                 startPoint: .top,
                 endPoint: .bottom
             )
@@ -173,10 +278,9 @@ struct CategorySelectionSheet: View {
             VStack(spacing: 16) {
                 Capsule()
                     .fill(Color.white.opacity(0.3))
-                    .frame(width: 38, height: 5)
+                    .frame(width: 36, height: 5)
                     .padding(.top, 12)
                 
-                // Textes multilingues dynamiques
                 VStack(spacing: 4) {
                     Text(langManager.text(for: "select_mode"))
                         .font(.system(size: 24, weight: .black, design: .rounded))
@@ -187,12 +291,10 @@ struct CategorySelectionSheet: View {
                         .fontWeight(.medium)
                         .foregroundColor(.white.opacity(0.6))
                 }
-                .padding(.bottom, 4)
+                .padding(.bottom, 6)
                 
-                // Disposé proprement pour 3 cartes (2 en haut + 1 carte large centrée pour l'événement)
                 VStack(spacing: 14) {
                     HStack(spacing: 14) {
-                        // Mode École
                         CategoryCard(
                             title: langManager.text(for: "mode_school"),
                             subtitle: langManager.text(for: "subtitle_school"),
@@ -201,7 +303,6 @@ struct CategorySelectionSheet: View {
                             action: { onSelect(.school) }
                         )
                         
-                        // Mode Monde
                         CategoryCard(
                             title: langManager.text(for: "mode_world"),
                             subtitle: langManager.text(for: "subtitle_world"),
@@ -211,7 +312,6 @@ struct CategorySelectionSheet: View {
                         )
                     }
                     
-                    // Mode Halloween centrée
                     CategoryCard(
                         title: langManager.text(for: "mode_halloween"),
                         subtitle: langManager.text(for: "subtitle_halloween"),
@@ -229,7 +329,7 @@ struct CategorySelectionSheet: View {
     }
 }
 
-// MARK: - Carte de Mode Interactive
+// MARK: - Interactive Mode Card / インタラクティブなモードカード
 struct CategoryCard: View {
     let title: String
     let subtitle: String
@@ -251,15 +351,15 @@ struct CategoryCard: View {
                                     endPoint: .bottomTrailing
                                 )
                             )
-                            .frame(width: 50, height: 50)
-                            .shadow(color: gradientColors[0].opacity(0.4), radius: 8, x: 0, y: 4)
+                            .frame(width: 52, height: 52)
+                            .shadow(color: gradientColors[0].opacity(0.5), radius: 10, x: 0, y: 5)
                         
                         Image(systemName: icon)
                             .font(.system(size: 24, weight: .bold))
                             .foregroundColor(.white)
                     }
                     
-                    VStack(spacing: 2) {
+                    VStack(spacing: 3) {
                         Text(title)
                             .font(.system(size: 16, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
@@ -268,7 +368,7 @@ struct CategoryCard: View {
                         Text(subtitle)
                             .font(.caption2)
                             .fontWeight(.medium)
-                            .foregroundColor(.white.opacity(0.6))
+                            .foregroundColor(.white.opacity(0.65))
                             .lineLimit(1)
                     }
                 }
@@ -276,13 +376,13 @@ struct CategoryCard: View {
                 .padding(.vertical, 16)
                 .padding(.horizontal, 6)
                 .background(
-                    RoundedRectangle(cornerRadius: 22)
-                        .fill(Color(white: 0.18))
+                    RoundedRectangle(cornerRadius: 24, style: .continuous)
+                        .fill(Color.white.opacity(0.08))
                         .overlay(
-                            RoundedRectangle(cornerRadius: 22)
+                            RoundedRectangle(cornerRadius: 24, style: .continuous)
                                 .stroke(
                                     LinearGradient(
-                                        colors: isSpecial ? [.orange, .purple] : [Color.white.opacity(0.15), Color.clear],
+                                        colors: isSpecial ? [.orange, .purple] : [Color.white.opacity(0.2), Color.white.opacity(0.05)],
                                         startPoint: .topLeading,
                                         endPoint: .bottomTrailing
                                     ),
@@ -290,18 +390,19 @@ struct CategoryCard: View {
                                 )
                         )
                 )
-                .shadow(color: isSpecial ? Color.orange.opacity(0.2) : Color.black.opacity(0.25), radius: 8, x: 0, y: 4)
+                .shadow(color: isSpecial ? Color.orange.opacity(0.25) : Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
                 
                 if isSpecial {
                     Text("EVENT")
-                        .font(.system(size: 8, weight: .black))
+                        .font(.system(size: 9, weight: .black))
                         .foregroundColor(.white)
-                        .padding(.horizontal, 6)
+                        .padding(.horizontal, 7)
                         .padding(.vertical, 3)
                         .background(
                             Capsule()
                                 .fill(LinearGradient(colors: [.orange, .red], startPoint: .leading, endPoint: .trailing))
                         )
+                        .shadow(color: .orange.opacity(0.5), radius: 4)
                         .padding(.top, 8)
                         .padding(.trailing, 8)
                 }
@@ -311,11 +412,11 @@ struct CategoryCard: View {
     }
 }
 
-// MARK: - Animation d'Appui Tactile
+// MARK: - Touch Press Animation (Premium Spring Effect) / タッチプレスアニメーション（高品質スプリング効果）
 struct ScaleButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .scaleEffect(configuration.isPressed ? 0.93 : 1.0)
+            .scaleEffect(configuration.isPressed ? 0.94 : 1.0)
             .animation(.spring(response: 0.25, dampingFraction: 0.6), value: configuration.isPressed)
     }
 }
