@@ -6,18 +6,12 @@ struct GameView: View {
     @EnvironmentObject var scoreManager: ScoreManager
     @Environment(\.dismiss) var dismiss
     
-    // 1. Réception de la catégorie choisie depuis ContentView
     let category: GameCategory
-    
     @StateObject private var gameModel = GameModel()
     
     @State private var inputAnswer: String = ""
-    @State private var timeRemaining: Int = 30
-    @State private var isGameRunning: Bool = true // Controls the timer / タイマーを制御
     @State private var playerName: String = ""
     @State private var showNameInputDialog = false
-    
-    let timer = Timer.publish(every: 1.0, on: .main, in: .common).autoconnect()
     
     var body: some View {
         ZStack {
@@ -30,12 +24,12 @@ struct GameView: View {
             
             VStack(spacing: 20) {
                 
-                // MARK: - 1. Header (Score & Timer) / ヘッダー (スコア & タイマー)
+                // MARK: - 1. Header (Score Total, Compteur 1/3 & Timer 20s)
                 HStack {
                     HStack(spacing: 6) {
                         Image(systemName: "star.fill")
                             .foregroundColor(.yellow)
-                        Text("\(langManager.text(for: "score")): \(gameModel.currentScore)")
+                        Text("\(langManager.text(for: "score")): \(gameModel.totalScore)")
                             .font(.system(.title3, design: .monospaced))
                             .fontWeight(.bold)
                             .foregroundColor(.white)
@@ -43,10 +37,16 @@ struct GameView: View {
                     
                     Spacer()
                     
+                    Text("\(gameModel.currentIndex + 1)/\(gameModel.activeQuestions.count)")
+                        .font(.headline)
+                        .foregroundColor(.gray)
+                    
+                    Spacer()
+                    
                     HStack(spacing: 6) {
                         Image(systemName: "clock.fill")
                             .foregroundColor(.orange)
-                        Text("\(timeRemaining)s")
+                        Text("\(gameModel.timeRemaining)s")
                             .font(.system(.title2, design: .monospaced))
                             .fontWeight(.bold)
                             .foregroundColor(.orange)
@@ -57,7 +57,7 @@ struct GameView: View {
                 
                 Spacer()
                 
-                // MARK: - 2. Center Area (Zoom Photo Square) / 中央エリア (ズーム写真スクエア)
+                // MARK: - 2. Photo Area (Dézoom dynamique)
                 ZStack {
                     RoundedRectangle(cornerRadius: 24)
                         .fill(Color(white: 0.2))
@@ -89,7 +89,7 @@ struct GameView: View {
                 .cornerRadius(24)
                 .clipped()
                 
-                // Feedback / フィードバック表示
+                // Feedback (Correct / Incorrect)
                 if let isCorrect = gameModel.isCorrectAnswer {
                     Text(isCorrect ? langManager.text(for: "correct") : langManager.text(for: "incorrect"))
                         .font(.headline)
@@ -99,7 +99,7 @@ struct GameView: View {
                 
                 Spacer()
                 
-                // MARK: - 3. Bottom Area (Input Line) / 下部エリア (入力ライン)
+                // MARK: - 3. Input Line & Controls
                 VStack(spacing: 12) {
                     HStack(spacing: 10) {
                         TextField(langManager.text(for: "type_answer"), text: $inputAnswer)
@@ -127,16 +127,15 @@ struct GameView: View {
                         .disabled(inputAnswer.isEmpty)
                     }
                     
-                    // Pause / Resume Button / 一時停止・再開ボタン
+                    // Pause / Reprendre
                     Button(action: {
-                        isGameRunning.toggle()
-                        if isGameRunning {
-                            gameModel.startGame()
-                        } else {
+                        if gameModel.isPlaying {
                             gameModel.stopGame()
+                        } else {
+                            gameModel.startRound()
                         }
                     }) {
-                        Text(isGameRunning ? langManager.text(for: "pause") : langManager.text(for: "resume"))
+                        Text(gameModel.isPlaying ? langManager.text(for: "pause") : langManager.text(for: "resume"))
                             .font(.subheadline)
                             .fontWeight(.bold)
                             .foregroundColor(.white.opacity(0.8))
@@ -148,27 +147,14 @@ struct GameView: View {
             }
         }
         .onAppear {
-            timeRemaining = 30
-            isGameRunning = true
-            // Initialise 3 photos aléatoires pour la catégorie sélectionnée
+            inputAnswer = ""
             gameModel.setupAndStartGame(category: category)
         }
-        .onReceive(timer) { _ in
-            guard isGameRunning else { return }
-            
-            if timeRemaining > 1 {
-                timeRemaining -= 1
-            } else {
-                timeRemaining = 0
-                isGameRunning = false
-                gameModel.stopGame()
-                showNameInputDialog = true // Temps écoulé
-            }
+        .onChange(of: gameModel.currentIndex) { oldValue, newValue in
+            inputAnswer = ""
         }
-        // Écoute la fin de partie (quand les 3 questions sont réussies)
         .onChange(of: gameModel.isGameOver) { oldValue, newValue in
             if newValue {
-                isGameRunning = false
                 showNameInputDialog = true
             }
         }
@@ -179,7 +165,7 @@ struct GameView: View {
                     ? "Player"
                     : playerName
                 
-                scoreManager.addScore(name: nameToSave, score: gameModel.currentScore)
+                scoreManager.addScore(name: nameToSave, score: gameModel.totalScore)
                 playerName = ""
                 dismiss()
             }
@@ -190,9 +176,7 @@ struct GameView: View {
     
     private func submitAnswer() {
         guard !inputAnswer.isEmpty else { return }
-        
-        let isCorrect = gameModel.checkAnswer(inputAnswer, language: langManager.selectedLanguage)
-        
+        let isCorrect = gameModel.checkAnswer(inputAnswer)
         if isCorrect {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                 inputAnswer = ""
@@ -202,10 +186,3 @@ struct GameView: View {
         }
     }
 }
-
-#Preview {
-    GameView(category: .school)
-        .environmentObject(LanguageManager())
-        .environmentObject(ScoreManager())
-}
-

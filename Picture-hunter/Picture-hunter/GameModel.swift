@@ -16,26 +16,26 @@ struct Question: Identifiable {
     let id = UUID()
     let imageName: String      // Image asset name / Assets内の画像名
     let category: GameCategory // Game Mode / カテゴリ
-    let answerJa: [String]    // Japanese correct answers / 日本語正解リスト
-    let answerEn: [String]    // English correct answers / 英語正解リスト
-    let answerMy: [String]    // Myanmar correct answers / ミャンマー語正解リスト
+    let answerJa: [String]    // Japanese correct answers
+    let answerEn: [String]    // English correct answers
+    let answerMy: [String]    // Myanmar correct answers
     
-    /// Get correct answers based on selected language
-    func localizedAnswers(for language: Language) -> [String] {
-        switch language {
-        case .japanese: return answerJa
-        case .english:  return answerEn
-        case .myanmar:  return answerMy
-        }
+    /// Get ALL correct answers across ALL languages
+    var allAnswers: [String] {
+        return answerJa + answerEn + answerMy
     }
 }
 
 // MARK: - Game Progress Management ViewModel / ゲーム進行管理 ViewModel
 class GameModel: ObservableObject {
-    @Published var activeQuestions: [Question] = [] // The 3 randomly selected questions
+    @Published var activeQuestions: [Question] = [] // Les 3 questions sélectionnées
     @Published var currentIndex: Int = 0
     @Published var currentZoomScale: CGFloat = 5.0
-    @Published var currentScore: Int = 1000
+    
+    @Published var imageScore: Int = 1000       // Score pour l'image en cours (Max 1000)
+    @Published var totalScore: Int = 0          // Score total cumulé pour le classement
+    @Published var timeRemaining: Int = 20      // Chrono individuel de 20s par image
+    
     @Published var isPlaying: Bool = false
     @Published var isGameOver: Bool = false
     @Published var isCorrectAnswer: Bool? = nil
@@ -43,16 +43,14 @@ class GameModel: ObservableObject {
     
     private var timer: Timer?
     private let minZoomScale: CGFloat = 1.0
-    private let zoomStep: CGFloat = 0.03
+    private let zoomStep: CGFloat = 0.02 // 20 secondes pour dézoomer de 5.0 à 1.0
     
-    // Master database of questions / 全問題のデータベース
     private var masterQuestionBank: [Question] = []
     
     init() {
         loadMasterQuestions()
     }
     
-    /// Load all questions for all categories / 全モードの問題データ読み込み
     private func loadMasterQuestions() {
         self.masterQuestionBank = [
             // --- MODE SCHOOL ---
@@ -73,19 +71,23 @@ class GameModel: ObservableObject {
                      answerEn: ["blackboard", "chalkboard"],
                      answerMy: ["ကျောက်သင်ပုန်း"]),
                      
-            // --- MODE WORLD ---
-            Question(imageName: "world_eiffel", category: .world,
-                     answerJa: ["エッフェル塔", "エッフェルとう", "えっふぇるとう"],
-                     answerEn: ["Eiffel Tower", "eiffel tower", "eiffeltower"],
-                     answerMy: ["အီဖယ် တာဝါ"]),
-            Question(imageName: "world_pyramid", category: .world,
-                     answerJa: ["ピラミッド", "ぴらみっど"],
-                     answerEn: ["pyramid", "Pyramid"],
-                     answerMy: ["ပိရမစ်"]),
-            Question(imageName: "world_statue_liberty", category: .world,
-                     answerJa: ["自由の女神", "じゆうのめがみ"],
-                     answerEn: ["Statue of Liberty", "statue of liberty"],
-                     answerMy: ["လွတ်လပ်ရေးကျောက်တိုင်"]),
+            // --- MODE WORLD (Pays / Countries) ---
+            Question(imageName: "eiffel_tower", category: .world,
+                     answerJa: ["フランス", "ふらんす"],
+                     answerEn: ["France", "france"],
+                     answerMy: ["ပြင်သစ်"]),
+            Question(imageName: "pyramid", category: .world,
+                     answerJa: ["エジプト", "えじぷと"],
+                     answerEn: ["Egypt", "egypt"],
+                     answerMy: ["အီဂျစ်"]),
+            Question(imageName: "statue_of_liberty", category: .world,
+                     answerJa: ["アメリカ", "あめりか", "米国"],
+                     answerEn: ["USA", "United States", "America", "usa", "america"],
+                     answerMy: ["အမေရိကန်"]),
+            Question(imageName: "collosseo", category: .world,
+                     answerJa: ["イタリア", "いたりあ"],
+                     answerEn: ["Italy", "italy"],
+                     answerMy: ["အီတလီ"]),
                      
             // --- MODE HALLOWEEN ---
             Question(imageName: "halloween_jacko", category: .halloween,
@@ -103,69 +105,76 @@ class GameModel: ObservableObject {
         ]
     }
     
-    /// Prepare 3 random questions for the selected mode and start / 選択モードからランダムで3問選んで開始
+    /// Initialise la partie (3 photos)
     func setupAndStartGame(category: GameCategory) {
+        stopGame()
+        
         self.currentCategory = category
-        
-        // Filter questions by selected category / モード別にフィルタリング
         let filtered = masterQuestionBank.filter { $0.category == category }
-        
-        // Pick 3 random questions / 3問をランダムにピックアップ
         self.activeQuestions = Array(filtered.shuffled().prefix(3))
         
-        // Reset states
         self.currentIndex = 0
-        self.currentScore = 1000
-        self.currentZoomScale = 5.0
+        self.totalScore = 0
         self.isGameOver = false
-        self.isCorrectAnswer = nil
         
-        startGame()
+        startRound()
     }
     
-    /// Get the current active question
     var currentQuestion: Question? {
         guard currentIndex < activeQuestions.count else { return nil }
         return activeQuestions[currentIndex]
     }
     
-    /// Start timer and zoom-out logic
-    func startGame() {
+    /// Lance un round de 20 secondes pour l'image courante
+    func startRound() {
         isPlaying = true
         isCorrectAnswer = nil
+        currentZoomScale = 5.0
+        imageScore = 1000
+        timeRemaining = 20
+        
         timer?.invalidate()
         
+        var subTickCount = 0
         timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
             guard let self = self, self.isPlaying else { return }
             
-            // Decrease zoom scale until 1.0
+            // 1. Dézoom fluide de 5.0 à 1.0
             if self.currentZoomScale > self.minZoomScale {
                 self.currentZoomScale -= self.zoomStep
             }
             
-            // Decrease score over time
-            if self.currentScore > 0 {
-                self.currentScore -= 5
-            } else {
-                self.currentScore = 0
-                self.stopGame()
-                self.isGameOver = true
+            // 2. Diminution du score de l'image
+            if self.imageScore > 0 {
+                self.imageScore -= 5
+            }
+            
+            // 3. Gestion du chrono d'une seconde (tous les 10 ticks de 0.1s)
+            subTickCount += 1
+            if subTickCount >= 10 {
+                subTickCount = 0
+                if self.timeRemaining > 1 {
+                    self.timeRemaining -= 1
+                } else {
+                    self.timeRemaining = 0
+                    // Temps écoulé pour cette image -> On passe à la suivante !
+                    self.nextQuestion()
+                }
             }
         }
     }
     
-    /// Stop timer
     func stopGame() {
         isPlaying = false
         timer?.invalidate()
         timer = nil
     }
     
-    /// Check user input answer
-    func checkAnswer(_ input: String, language: Language) -> Bool {
-        guard let question = currentQuestion else { return false }
+    /// Vérifie la réponse (Toutes les langues sont acceptées)
+    func checkAnswer(_ input: String) -> Bool {
+        guard let question = currentQuestion, isPlaying else { return false }
         
-        let validAnswers = question.localizedAnswers(for: language)
+        let validAnswers = question.allAnswers // 🌐 Accepte FR, EN, JA, MY !
         let formattedInput = input.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         
         let isCorrect = validAnswers.contains { answer in
@@ -174,31 +183,35 @@ class GameModel: ObservableObject {
         
         if isCorrect {
             isCorrectAnswer = true
-            // Passage à la question suivante après un petit délai ou direct
+            totalScore += imageScore // Ajoute le score de cette image au Total
+            
+            // Passe à l'image suivante après 0.8 seconde
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                 self.nextQuestion()
             }
             return true
         } else {
             isCorrectAnswer = false
-            currentScore = max(0, currentScore - 150)
+            imageScore = max(0, imageScore - 150) // Pénalité sur l'image en cours
             
-            if currentScore == 0 {
-                stopGame()
-                isGameOver = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                if self.isCorrectAnswer == false {
+                    self.isCorrectAnswer = nil
+                }
             }
             return false
         }
     }
     
-    /// Advance to next question or end game after 3 photos
+    /// Avance à l'image suivante ou termine la partie au bout de 3 images
     func nextQuestion() {
+        timer?.invalidate()
+        
         if currentIndex + 1 < activeQuestions.count {
             currentIndex += 1
-            currentZoomScale = 5.0
-            isCorrectAnswer = nil
+            startRound() // Relance les 20s et le zoom pour l'image 2 ou 3
         } else {
-            // 3/3 photos trouvées : Victoire !
+            // Fin des 3 images -> Victoire / Sauvegarde du score !
             stopGame()
             isGameOver = true
         }
