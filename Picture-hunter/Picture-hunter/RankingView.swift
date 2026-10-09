@@ -60,7 +60,7 @@ struct RankingView: View {
                                     
                                     Spacer()
                                     
-                                    Text("\(item.score) \(langManager.text(for: "pts"))")
+                                    Text("\(item.score) 枚")
                                         .font(.system(.body, design: .monospaced))
                                         .fontWeight(.bold)
                                         .foregroundColor(.yellow)

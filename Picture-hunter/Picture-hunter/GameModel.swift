@@ -20,7 +20,6 @@ struct Question: Identifiable {
     let answerEn: [String]    // English correct answers
     let answerMy: [String]    // Myanmar correct answers
     
-    /// Get ALL correct answers across ALL languages
     var allAnswers: [String] {
         return answerJa + answerEn + answerMy
     }
@@ -28,14 +27,13 @@ struct Question: Identifiable {
 
 // MARK: - Game Progress Management ViewModel / ゲーム進行管理 ViewModel
 class GameModel: ObservableObject {
-    @Published var activeQuestions: [Question] = [] // 出題キュー（60秒間ループ）
+    @Published var activeQuestions: [Question] = []
     @Published var currentIndex: Int = 0
     @Published var currentZoomScale: CGFloat = 5.0
     
-    @Published var imageScore: Int = 1000       // 現在の画像で獲得できるスコア
-    @Published var totalScore: Int = 0          // 60秒間で獲得した合計スコア
-    @Published var globalTimeRemaining: Int = 60 // 60秒タイムアタック用タイマー
-    @Published var correctCount: Int = 0        // 正解した問題数
+    @Published var totalScore: Int = 0          // Score total (100 pts par image)
+    @Published var globalTimeRemaining: Int = 60 // 60 secondes
+    @Published var correctCount: Int = 0        // Nombre d'images trouvées
     
     @Published var isPlaying: Bool = false
     @Published var isGameOver: Bool = false
@@ -44,7 +42,7 @@ class GameModel: ObservableObject {
     
     private var timer: Timer?
     private let minZoomScale: CGFloat = 1.0
-    private let zoomStep: CGFloat = 0.04 // 10秒でズームアウト完了（スピード感アップ）
+    private let zoomStep: CGFloat = 0.04
     
     private var masterQuestionBank: [Question] = []
     
@@ -106,13 +104,11 @@ class GameModel: ObservableObject {
         ]
     }
     
-    /// 60秒タイムアタックゲームの初期化と開始
     func setupAndStartGame(category: GameCategory) {
         stopGame()
         
         self.currentCategory = category
         let filtered = masterQuestionBank.filter { $0.category == category }
-        // ランダムに並び替えてセット（問題数が足りなくなったらループ）
         self.activeQuestions = filtered.shuffled()
         
         self.currentIndex = 0
@@ -130,7 +126,6 @@ class GameModel: ObservableObject {
         return activeQuestions[currentIndex % activeQuestions.count]
     }
     
-    /// 60秒の全体タイマーを開始
     private func startGlobalTimer() {
         isPlaying = true
         timer?.invalidate()
@@ -139,17 +134,12 @@ class GameModel: ObservableObject {
         timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
             guard let self = self, self.isPlaying else { return }
             
-            // 1. ズームアウトアニメーション
+            // ズームアウト
             if self.currentZoomScale > self.minZoomScale {
                 self.currentZoomScale -= self.zoomStep
             }
             
-            // 2. 問題単位の獲得スコア減点（早く答えるほど高得点）
-            if self.imageScore > 200 {
-                self.imageScore -= 10
-            }
-            
-            // 3. 1秒カウントダウン (0.1秒 × 10回)
+            // カウントダウン
             subTickCount += 1
             if subTickCount >= 10 {
                 subTickCount = 0
@@ -157,17 +147,15 @@ class GameModel: ObservableObject {
                     self.globalTimeRemaining -= 1
                 } else {
                     self.globalTimeRemaining = 0
-                    self.finishGame() // 60秒経過でゲーム終了！
+                    self.finishGame()
                 }
             }
         }
     }
     
-    /// 問題切り替え時の初期化
     private func startQuestionRound() {
         isCorrectAnswer = nil
         currentZoomScale = 5.0
-        imageScore = 1000
     }
     
     func stopGame() {
@@ -181,7 +169,6 @@ class GameModel: ObservableObject {
         isGameOver = true
     }
     
-    /// 解答チェック
     func checkAnswer(_ input: String) -> Bool {
         guard let question = currentQuestion, isPlaying else { return false }
         
@@ -194,10 +181,8 @@ class GameModel: ObservableObject {
         
         if isCorrect {
             isCorrectAnswer = true
-            totalScore += imageScore
             correctCount += 1
             
-            // 0.4秒後に次の問題へ
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                 if self.isPlaying {
                     self.nextQuestion()
@@ -206,7 +191,6 @@ class GameModel: ObservableObject {
             return true
         } else {
             isCorrectAnswer = false
-            imageScore = max(100, imageScore - 150) // お手つきペナルティ
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                 if self.isCorrectAnswer == false {
@@ -217,10 +201,8 @@ class GameModel: ObservableObject {
         }
     }
     
-    /// 次の問題へ移動（無限ループ対応）
     func nextQuestion() {
         currentIndex += 1
-        // リストを一周したら再度シャッフル
         if currentIndex >= activeQuestions.count {
             activeQuestions.shuffle()
             currentIndex = 0
@@ -228,7 +210,6 @@ class GameModel: ObservableObject {
         startQuestionRound()
     }
     
-    /// パス機能（分からない場合に次へ）
     func skipQuestion() {
         guard isPlaying else { return }
         nextQuestion()

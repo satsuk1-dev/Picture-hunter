@@ -24,40 +24,46 @@ struct GameView: View {
             
             VStack(spacing: 20) {
                 
-                // MARK: - 1. Header (Score Total, Correct Count & Global Timer 60s)
+                // MARK: - 1. Header — Found images + 60s timer / ヘッダー — 発見数 + 60秒タイマー
                 HStack {
-                    HStack(spacing: 6) {
-                        Image(systemName: "star.fill")
-                            .foregroundColor(.yellow)
-                        Text("\(langManager.text(for: "score")): \(gameModel.totalScore)")
-                            .font(.system(.title3, design: .monospaced))
+                    HStack(spacing: 8) {
+                        Image(systemName: "photo.stack.fill")
+                            .foregroundColor(.green)
+                            .font(.title3)
+                        
+                        Text("\(gameModel.correctCount) 枚")
+                            .font(.system(.title2, design: .rounded))
                             .fontWeight(.bold)
                             .foregroundColor(.white)
                     }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(Color.white.opacity(0.1))
+                    .cornerRadius(12)
                     
                     Spacer()
                     
-                    Text("正解数: \(gameModel.correctCount)")
-                        .font(.headline)
-                        .foregroundColor(.gray)
-                    
-                    Spacer()
-                    
+                    // 60s countdown / 60秒カウントダウン
                     HStack(spacing: 6) {
                         Image(systemName: "clock.fill")
                             .foregroundColor(gameModel.globalTimeRemaining <= 10 ? .red : .orange)
+                        
                         Text("\(gameModel.globalTimeRemaining)s")
                             .font(.system(.title2, design: .monospaced))
                             .fontWeight(.bold)
                             .foregroundColor(gameModel.globalTimeRemaining <= 10 ? .red : .orange)
                     }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(Color.white.opacity(0.1))
+                    .cornerRadius(12)
                 }
                 .padding(.horizontal)
                 .padding(.top, 10)
                 
                 Spacer()
                 
-                // MARK: - 2. Photo Area (Dézoom dynamique)
+                // MARK: - 2. Photo Area — Dynamic zoom-out / 写真エリア — 動的ズームアウト
                 ZStack {
                     RoundedRectangle(cornerRadius: 24)
                         .fill(Color(white: 0.2))
@@ -89,7 +95,7 @@ struct GameView: View {
                 .cornerRadius(24)
                 .clipped()
                 
-                // Feedback (Correct / Incorrect)
+                // Feedback (Correct / Incorrect) / フィードバック（正解 / 不正解）
                 if let isCorrect = gameModel.isCorrectAnswer {
                     Text(isCorrect ? langManager.text(for: "correct") : langManager.text(for: "incorrect"))
                         .font(.title2)
@@ -97,14 +103,13 @@ struct GameView: View {
                         .foregroundColor(isCorrect ? .green : .red)
                         .transition(.scale)
                 } else {
-                    // Espace réservé pour éviter les sauts de mise en page
                     Text("")
                         .font(.title2)
                 }
                 
                 Spacer()
                 
-                // MARK: - 3. Input Line & Controls
+                // MARK: - 3. Input & Controls / 入力と操作
                 VStack(spacing: 12) {
                     HStack(spacing: 10) {
                         TextField(langManager.text(for: "type_answer"), text: $inputAnswer)
@@ -135,7 +140,7 @@ struct GameView: View {
                         .disabled(inputAnswer.isEmpty)
                     }
                     
-                    // Controls (Skip & Pause)
+                    // Controls — Skip & Pause / 操作 — スキップと一時停止
                     HStack(spacing: 20) {
                         Button(action: {
                             gameModel.skipQuestion()
@@ -189,22 +194,19 @@ struct GameView: View {
                     ? "Player"
                     : playerName
                 
-                scoreManager.addScore(name: nameToSave, score: gameModel.totalScore)
+                // Save number of found images to scoreManager / 発見枚数をscoreManagerに保存
+                scoreManager.addScore(name: nameToSave, score: gameModel.correctCount)
                 playerName = ""
                 dismiss()
             }
         } message: {
-            Text(langManager.text(for: "enter_name_message"))
+            Text("60秒で \(gameModel.correctCount) 枚の画像を当てました！")
         }
     }
     
     private func submitAnswer() {
         guard !inputAnswer.isEmpty else { return }
-        let isCorrect = gameModel.checkAnswer(inputAnswer)
-        if isCorrect {
-            inputAnswer = ""
-        } else {
-            inputAnswer = ""
-        }
+        let _ = gameModel.checkAnswer(inputAnswer)
+        inputAnswer = ""
     }
 }
