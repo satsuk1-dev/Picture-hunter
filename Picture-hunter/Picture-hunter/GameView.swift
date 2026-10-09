@@ -24,7 +24,7 @@ struct GameView: View {
             
             VStack(spacing: 20) {
                 
-                // MARK: - 1. Header (Score Total, Compteur 1/3 & Timer 20s)
+                // MARK: - 1. Header (Score Total, Correct Count & Global Timer 60s)
                 HStack {
                     HStack(spacing: 6) {
                         Image(systemName: "star.fill")
@@ -37,7 +37,7 @@ struct GameView: View {
                     
                     Spacer()
                     
-                    Text("\(gameModel.currentIndex + 1)/\(gameModel.activeQuestions.count)")
+                    Text("正解数: \(gameModel.correctCount)")
                         .font(.headline)
                         .foregroundColor(.gray)
                     
@@ -45,11 +45,11 @@ struct GameView: View {
                     
                     HStack(spacing: 6) {
                         Image(systemName: "clock.fill")
-                            .foregroundColor(.orange)
-                        Text("\(gameModel.timeRemaining)s")
+                            .foregroundColor(gameModel.globalTimeRemaining <= 10 ? .red : .orange)
+                        Text("\(gameModel.globalTimeRemaining)s")
                             .font(.system(.title2, design: .monospaced))
                             .fontWeight(.bold)
-                            .foregroundColor(.orange)
+                            .foregroundColor(gameModel.globalTimeRemaining <= 10 ? .red : .orange)
                     }
                 }
                 .padding(.horizontal)
@@ -92,9 +92,14 @@ struct GameView: View {
                 // Feedback (Correct / Incorrect)
                 if let isCorrect = gameModel.isCorrectAnswer {
                     Text(isCorrect ? langManager.text(for: "correct") : langManager.text(for: "incorrect"))
-                        .font(.headline)
+                        .font(.title2)
+                        .fontWeight(.bold)
                         .foregroundColor(isCorrect ? .green : .red)
                         .transition(.scale)
+                } else {
+                    // Espace réservé pour éviter les sauts de mise en page
+                    Text("")
+                        .font(.title2)
                 }
                 
                 Spacer()
@@ -113,6 +118,9 @@ struct GameView: View {
                             )
                             .autocapitalization(.none)
                             .disableAutocorrection(true)
+                            .onSubmit {
+                                submitAnswer()
+                            }
                         
                         Button(action: {
                             submitAnswer()
@@ -127,19 +135,35 @@ struct GameView: View {
                         .disabled(inputAnswer.isEmpty)
                     }
                     
-                    // Pause / Reprendre
-                    Button(action: {
-                        if gameModel.isPlaying {
-                            gameModel.stopGame()
-                        } else {
-                            gameModel.startRound()
+                    // Controls (Skip & Pause)
+                    HStack(spacing: 20) {
+                        Button(action: {
+                            gameModel.skipQuestion()
+                            inputAnswer = ""
+                        }) {
+                            Text("パス (Skip)")
+                                .font(.subheadline)
+                                .fontWeight(.bold)
+                                .foregroundColor(.orange)
+                                .padding(.vertical, 8)
+                                .padding(.horizontal, 16)
+                                .background(Color.orange.opacity(0.2))
+                                .cornerRadius(10)
                         }
-                    }) {
-                        Text(gameModel.isPlaying ? langManager.text(for: "pause") : langManager.text(for: "resume"))
-                            .font(.subheadline)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white.opacity(0.8))
-                            .padding(.vertical, 8)
+                        
+                        Button(action: {
+                            if gameModel.isPlaying {
+                                gameModel.stopGame()
+                            } else {
+                                gameModel.setupAndStartGame(category: category)
+                            }
+                        }) {
+                            Text(gameModel.isPlaying ? langManager.text(for: "pause") : langManager.text(for: "resume"))
+                                .font(.subheadline)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white.opacity(0.8))
+                                .padding(.vertical, 8)
+                        }
                     }
                 }
                 .padding(.horizontal)
@@ -178,9 +202,7 @@ struct GameView: View {
         guard !inputAnswer.isEmpty else { return }
         let isCorrect = gameModel.checkAnswer(inputAnswer)
         if isCorrect {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                inputAnswer = ""
-            }
+            inputAnswer = ""
         } else {
             inputAnswer = ""
         }
