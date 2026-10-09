@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		7F2C46A5307340BD00A3BA9E /* Picture hunter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "Picture hunter.app"; path = "/Users/cmstudent/Desktop/Picture-hunter/Picture-hunter/build/Debug-iphoneos/Picture hunter.app"; sourceTree = "<absolute>"; };
+		7F81605A3075E2EB0064D557 /* Picture hunter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Picture hunter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -33,6 +33,7 @@
 			isa = PBXGroup;
 			children = (
 				7F2C46A7307340BD00A3BA9E /* Picture-hunter */,
+				7F81605A3075E2EB0064D557 /* Picture hunter.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,7 +59,7 @@
 			packageProductDependencies = (
 			);
 			productName = "Picture hunter";
-			productReference = 7F2C46A5307340BD00A3BA9E /* Picture hunter.app */;
+			productReference = 7F81605A3075E2EB0064D557 /* Picture hunter.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
