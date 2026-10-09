@@ -91,7 +91,7 @@ struct GameView: View {
                             .foregroundColor(.gray)
                     }
                 }
-                .frame(width: 300, height: 300)
+                .frame(width: 360, height: 360)
                 .cornerRadius(24)
                 .clipped()
                 
@@ -209,4 +209,10 @@ struct GameView: View {
         let _ = gameModel.checkAnswer(inputAnswer)
         inputAnswer = ""
     }
+}
+
+#Preview {
+    GameView(category: .school)
+        .environmentObject(LanguageManager())
+        .environmentObject(ScoreManager())
 }
