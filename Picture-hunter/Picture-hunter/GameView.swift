@@ -13,6 +13,18 @@ struct GameView: View {
     @State private var playerName: String = ""
     @State private var showNameInputDialog = false
     
+    // Propriété pour sélectionner la bonne clé de traduction selon le mode
+    private var questionPromptKey: String {
+        switch category {
+        case .school:
+            return "question_school"
+        case .world:
+            return "question_world"
+        case .halloween:
+            return "question_halloween"
+        }
+    }
+    
     var body: some View {
         ZStack {
             LinearGradient(
@@ -22,7 +34,7 @@ struct GameView: View {
             )
             .ignoresSafeArea()
             
-            VStack(spacing: 20) {
+            VStack(spacing: 16) {
                 
                 // MARK: - 1. Header — Found images + 60s timer / ヘッダー — 発見数 + 60秒タイマー
                 HStack {
@@ -63,6 +75,14 @@ struct GameView: View {
                 
                 Spacer()
                 
+                // MARK: - Mode Question Header / モード別質問テキスト
+                Text(langManager.text(for: questionPromptKey))
+                    .font(.system(.title3, design: .rounded))
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 16)
+                
                 // MARK: - 2. Photo Area — Dynamic zoom-out / 写真エリア — 動的ズームアウト
                 ZStack {
                     RoundedRectangle(cornerRadius: 24)
@@ -91,7 +111,7 @@ struct GameView: View {
                             .foregroundColor(.gray)
                     }
                 }
-                .frame(width: 360, height: 360)
+                .frame(width: 340, height: 340)
                 .cornerRadius(24)
                 .clipped()
                 
@@ -194,7 +214,6 @@ struct GameView: View {
                     ? "Player"
                     : playerName
                 
-                // Save number of found images to scoreManager / 発見枚数をscoreManagerに保存
                 scoreManager.addScore(name: nameToSave, score: gameModel.correctCount)
                 playerName = ""
                 dismiss()
@@ -209,10 +228,4 @@ struct GameView: View {
         let _ = gameModel.checkAnswer(inputAnswer)
         inputAnswer = ""
     }
-}
-
-#Preview {
-    GameView(category: .school)
-        .environmentObject(LanguageManager())
-        .environmentObject(ScoreManager())
 }

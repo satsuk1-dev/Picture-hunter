@@ -99,14 +99,6 @@ struct ContentView: View {
                                 .overlay(
                                     Capsule().stroke(Color.white.opacity(0.2), lineWidth: 1)
                                 )
-                            
-                            Text(langManager.text(for: "app_description"))
-                                    .font(.footnote)
-                                    .foregroundColor(.white.opacity(0.75))
-                                    .multilineTextAlignment(.center)
-                                    .lineSpacing(4)
-                                    .padding(.horizontal, 32)
-                                    .padding(.top, 4)
                         }
                         .offset(y: appearAnimation ? 0 : 20)
                         .opacity(appearAnimation ? 1.0 : 0)
