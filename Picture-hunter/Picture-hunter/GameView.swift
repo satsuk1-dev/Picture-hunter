@@ -13,7 +13,7 @@ struct GameView: View {
     @State private var playerName: String = ""
     @State private var showNameInputDialog = false
     
-    // Propriété pour sélectionner la bonne clé de traduction selon le mode
+    
     private var questionPromptKey: String {
         switch category {
         case .school:
