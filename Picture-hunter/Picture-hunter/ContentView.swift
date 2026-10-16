@@ -86,7 +86,7 @@ struct ContentView: View {
                             Image("Picture-hunterTitle")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 280)
+                                .frame(width: 360)
                                 .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 5)
                             
                             Text(langManager.text(for: "subtitle"))
