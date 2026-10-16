@@ -253,7 +253,7 @@ struct ContentView: View {
                     .environmentObject(scoreManager)
             }
             .sheet(isPresented: $showSettingsScreen) {
-                SettingsView(selectedDifficulty: $selectedDifficulty)
+                SettingsView()
                     .environmentObject(langManager)
             }
         }
@@ -420,3 +420,4 @@ struct ScaleButtonStyle: ButtonStyle {
             .animation(.spring(response: 0.25, dampingFraction: 0.6), value: configuration.isPressed)
     }
 }
+

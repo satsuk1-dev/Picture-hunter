@@ -87,6 +87,65 @@ class GameModel: ObservableObject {
                      answerJa: ["イタリア", "いたりあ"],
                      answerEn: ["Italy", "italy"],
                      answerMy: ["အီတလီ"]),
+            Question(imageName: "fuji_san", category: .world,
+                     answerJa: ["日本", "にほん", "ニホン", "にっぽん", "富士山", "ふじさん"],
+                     answerEn: ["japan", "Japan", "mt fuji", "mount fuji"],
+                     answerMy: ["ဂျပန်"]),
+            Question(imageName: "world_merlion", category: .world,
+                     answerJa: ["シンガポール", "しんがぽーる"],
+                     answerEn: ["singapore", "Singapore"],
+                     answerMy: ["စင်ကာပူ"]),
+
+            Question(imageName: "world_sagrada_familia", category: .world,
+                     answerJa: ["スペイン", "すぺいん"],
+                     answerEn: ["spain", "Spain"],
+                     answerMy: ["စပိန်"]),
+
+            Question(imageName: "world_CN_tower", category: .world,
+                     answerJa: ["カナダ", "かなだ"],
+                     answerEn: ["canada", "Canada"],
+                     answerMy: ["ကနေဒါ"]),
+            
+            Question(imageName: "world_great_wall", category: .world,
+                    answerJa: ["中国", "ちゅうごく"],
+                    answerEn: ["china", "China"],
+                    answerMy: ["တရုတ်"]),
+
+                        
+            Question(imageName: "world_taj_mahal", category: .world,
+                     answerJa: ["インド", "いんど"],
+                     answerEn: ["india", "India"],
+                     answerMy: ["အိန္ဒိယ"]),
+
+                        
+            Question(imageName: "world_big_ben", category: .world,
+                    answerJa: ["イギリス", "いぎりす", "英国"],
+                    answerEn: ["uk","UK", "united kingdom", "england"],
+                    answerMy: ["ဗြိတိန်"]),
+
+                        
+            Question(imageName: "world_sydney_opera", category: .world,
+                    answerJa: ["オーストラリア", "おーすとらりあ"],
+                    answerEn: ["australia", "Australia"],
+                    answerMy: ["ဩစတြေးလျ"]),
+
+                        
+            Question(imageName: "world_christ_redeemer", category: .world,
+                    answerJa: ["ブラジル", "ぶらじる"],
+                    answerEn: ["brazil", "Brazil"],
+                    answerMy: ["ဘရာဇီး"]),
+
+
+            Question(imageName: "world_shwedagon", category: .world,
+                    answerJa: ["ミャンマー", "みゃんまー", "ビルマ"],
+                    answerEn: ["myanmar", "burma"],
+                    answerMy: ["မြန်မာ"]),
+
+            Question(imageName: "world_switzerland", category: .world,
+                    answerJa: ["スイス", "すいす"],
+                    answerEn: ["switzerland", "Switzerland"],
+                    answerMy: ["ဆူဇာလန်"]),
+
                      
             // --- MODE HALLOWEEN ---
             Question(imageName: "halloween_jacko", category: .halloween,

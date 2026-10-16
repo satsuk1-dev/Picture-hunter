@@ -9,46 +9,100 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject var langManager: LanguageManager
-    @Binding var selectedDifficulty: Difficulty
     @Environment(\.dismiss) var dismiss
-
+    
+    private struct LanguageOption: Identifiable {
+        let id = UUID()
+        let language: Language
+    }
+    
+    private let languages: [LanguageOption] = [
+        LanguageOption(language: .japanese),
+        LanguageOption(language: .english),
+        LanguageOption(language: .myanmar)
+    ]
+    
     var body: some View {
-        NavigationStack {
-            Form {
-                // Section Langue
-                Section(header: Text(langManager.text(for: "language"))) {
-                    Picker(langManager.text(for: "language"), selection: $langManager.selectedLanguage) {
-                        ForEach(Language.allCases) { lang in
-                            Text(lang.rawValue).tag(lang)
+        ZStack {
+            // Fond dégradé style Arcade
+            LinearGradient(
+                colors: [Color.black, Color(white: 0.12)],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
+            
+            VStack(spacing: 30) {
+                // MARK: - Header
+                HStack {
+                    Text(langManager.text(for: "settings"))
+                        .font(.system(size: 32, weight: .black, design: .rounded))
+                        .foregroundColor(.white)
+                    
+                    Spacer()
+                    
+                    Button(action: { dismiss() }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 30))
+                            .foregroundColor(.white.opacity(0.8))
+                    }
+                }
+                .padding(.horizontal, 24)
+                .padding(.top, 20)
+                
+                Spacer()
+                
+                // MARK: - Titre de Section
+                Text(langManager.text(for: "language"))
+                    .font(.system(size: 24, weight: .bold, design: .rounded))
+                    .foregroundColor(.white.opacity(0.9))
+                
+                // MARK: - Boutons de Langue (Style Arcade)
+                VStack(spacing: 16) {
+                    ForEach(languages) { option in
+                        let isSelected = (langManager.selectedLanguage == option.language)
+                        
+                        Button(action: {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                                langManager.selectedLanguage = option.language
+                            }
+                        }) {
+                            HStack {
+                                Text(option.language.rawValue)
+                                    .font(.system(size: 24, weight: .bold, design: .rounded))
+                                    .foregroundColor(.white)
+                                
+                                Spacer()
+                                
+                                if isSelected {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .font(.system(size: 28))
+                                        .foregroundColor(.green)
+                                        .shadow(color: .green.opacity(0.8), radius: 6)
+                                }
+                            }
+                            .padding(.vertical, 18)
+                            .padding(.horizontal, 24)
+                            .background(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(isSelected ? Color.blue.opacity(0.3) : Color.white.opacity(0.08))
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(
+                                        isSelected ? Color.blue : Color.white.opacity(0.15),
+                                        lineWidth: isSelected ? 3 : 1
+                                    )
+                            )
+                            .shadow(color: isSelected ? Color.blue.opacity(0.5) : Color.clear, radius: 12)
                         }
                     }
-                    .pickerStyle(.menu)
                 }
+                .padding(.horizontal, 24)
                 
-                // Section Difficulté
-                Section(header: Text(langManager.text(for: "difficulty"))) {
-                    Picker(langManager.text(for: "difficulty"), selection: $selectedDifficulty) {
-                        Text(langManager.text(for: "easy")).tag(Difficulty.easy)
-                        Text(langManager.text(for: "medium")).tag(Difficulty.medium)
-                        Text(langManager.text(for: "hard")).tag(Difficulty.hard)
-                    }
-                    .pickerStyle(.segmented)
-                }
-            }
-            .navigationTitle(langManager.text(for: "settings"))
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button(langManager.text(for: "close")) {
-                        dismiss()
-                    }
-                }
+                Spacer()
+                Spacer()
             }
         }
     }
-}
-
-#Preview {
-    SettingsView(selectedDifficulty: .constant(.medium))
-        .environmentObject(LanguageManager())
 }
