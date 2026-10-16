@@ -44,13 +44,18 @@ class LanguageManager: ObservableObject {
         "select_mode": "モードを選択",
         "subtitle_mode": "テーマを選んでゲームをスタート！",
         "mode_school": "学校",
-        "subtitle_school": "文房具・教室の物",
+        "subtitle_school": "校内スポット・教室の物",
         "mode_world": "世界",
         "subtitle_world": "世界の有名スポット",
         "mode_japan": "日本",
         "subtitle_japan": "日本の文化と名所",
         "mode_halloween": "ハロウィン",
         "subtitle_halloween": "期間限定イベント",
+        
+        // Dynamic Question Prompts / モード別設問タイトル
+        "question_school": "ここは学校のどこですか？",
+        "question_world": "この写真はどこの国ですか？",
+        "question_halloween": "これは何ですか？",
         
         // In-game
         "score": "スコア",
@@ -86,13 +91,18 @@ class LanguageManager: ObservableObject {
         "select_mode": "Select Game Mode",
         "subtitle_mode": "Choose a topic to start playing!",
         "mode_school": "School",
-        "subtitle_school": "Classroom items",
+        "subtitle_school": "School spots & items",
         "mode_world": "World",
         "subtitle_world": "Famous landmarks",
         "mode_japan": "Japan",
         "subtitle_japan": "Culture & sights",
         "mode_halloween": "Halloween 🎃",
         "subtitle_halloween": "Spooky event",
+        
+        // Dynamic Question Prompts
+        "question_school": "Where in the school is this?",
+        "question_world": "Which country is this photo from?",
+        "question_halloween": "What is this?",
         
         // In-game
         "score": "Score",
@@ -130,13 +140,18 @@ class LanguageManager: ObservableObject {
         "select_mode": "ဂိမ်းမုဒ်ကို ရွေးပါ",
         "subtitle_mode": "ကစားရန် ခေါင်းစဉ်တစ်ခုကို ရွေးပါ",
         "mode_school": "ကျောင်း",
-        "subtitle_school": "စာသင်ခန်းသုံးပစ္စည်းများ",
+        "subtitle_school": "ကျောင်းတွင်းနေရာများနှင့် ပစ္စည်းများ",
         "mode_world": "ကမ္ဘာ",
         "subtitle_world": "ကမ္ဘာကျော်နေရာများ",
         "mode_japan": "ဂျပန်",
         "subtitle_japan": "ဂျပန်ယဉ်ကျေးမှုနှင့် နေရာများ",
         "mode_halloween": "ဟောလိုးဝင်း 🎃",
         "subtitle_halloween": "သရဲပွဲတော် အထူးမုဒ်",
+        
+        // Dynamic Question Prompts
+        "question_school": "ဒါကျောင်းရဲ့ ဘယ်နေရာလဲ။",
+        "question_world": "ဒီဓာတ်ပုံက ဘယ်နိုင်ငံလဲ။",
+        "question_halloween": "ဒါဘာလဲ။",
         
         // In-game
         "score": "ရမှတ်",
