@@ -127,12 +127,8 @@ struct WelcomeView: View {
                 .allowsHitTesting(false)
 
             // タイトル（画面の中央）
-            Text("Picture\nhunter")
-                .font(.system(size: 80, weight: .regular, design: .default))
-                .multilineTextAlignment(.center)
-                .minimumScaleFactor(0.5)
-                .foregroundColor(.white)
-                .padding(.horizontal)
+            GIFView(name: "Picture-hunterLogo")
+                .frame(width: 400, height: 460)
 
             // 下のボタン（画面の下に固定）
             VStack {
