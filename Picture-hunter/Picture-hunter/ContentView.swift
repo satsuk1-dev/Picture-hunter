@@ -21,7 +21,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                // 🌌 Dynamic modern gradient background / 動的でモダンなグラデーション背景
+                //  Dynamic modern gradient background / 動的でモダンなグラデーション背景
                 LinearGradient(
                     colors: [
                         Color(red: 0.1, green: 0.05, blue: 0.25),
@@ -32,7 +32,7 @@ struct ContentView: View {
                 )
                 .ignoresSafeArea()
                 
-                // ✨ Background glow effects (Glow Orbs) / 背景のグロー効果（グローオーブ）
+                //  Background glow effects (Glow Orbs) / 背景のグロー効果（グローオーブ）
                 ZStack {
                     Circle()
                         .fill(Color.purple.opacity(0.4))
@@ -81,59 +81,12 @@ struct ContentView: View {
                     
                     // 📸 Logo & Main title / ロゴとメインタイトル
                     VStack(spacing: 16) {
-                        ZStack {
-                            Circle()
-                                .fill(
-                                    LinearGradient(
-                                        colors: [.purple, .blue],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    )
-                                )
-                                .frame(width: 100, height: 100)
-                                .blur(radius: 20)
-                                .opacity(0.7)
-                            
-                            Circle()
-                                .fill(.ultraThinMaterial)
-                                .frame(width: 90, height: 90)
-                                .overlay(
-                                    Circle().stroke(
-                                        LinearGradient(
-                                            colors: [.white.opacity(0.6), .white.opacity(0.1)],
-                                            startPoint: .topLeading,
-                                            endPoint: .bottomTrailing
-                                        ),
-                                        lineWidth: 1.5
-                                    )
-                                )
-                            
-                            Image(systemName: "camera.macro")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 44, height: 44)
-                                .foregroundStyle(
-                                    LinearGradient(
-                                        colors: [.white, .cyan.opacity(0.8)],
-                                        startPoint: .top,
-                                        endPoint: .bottom
-                                    )
-                                )
-                                .shadow(color: .white.opacity(0.3), radius: 8)
-                        }
-                        .scaleEffect(appearAnimation ? 1.0 : 0.6)
-                        .opacity(appearAnimation ? 1.0 : 0)
                         
                         VStack(spacing: 8) {
-                            Text(langManager.text(for: "app_title"))
-                                .font(.system(size: 40, weight: .black, design: .rounded))
-                                .foregroundStyle(
-                                    LinearGradient(
-                                        colors: [.white, Color.white.opacity(0.85)],
-                                        startPoint: .top,
-                                        endPoint: .bottom
-                                    )
-                                )
+                            Image("Picture-hunterTitle")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 280)
                                 .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 5)
                             
                             Text(langManager.text(for: "subtitle"))
@@ -146,6 +99,14 @@ struct ContentView: View {
                                 .overlay(
                                     Capsule().stroke(Color.white.opacity(0.2), lineWidth: 1)
                                 )
+                            
+                            Text(langManager.text(for: "app_description"))
+                                    .font(.footnote)
+                                    .foregroundColor(.white.opacity(0.75))
+                                    .multilineTextAlignment(.center)
+                                    .lineSpacing(4)
+                                    .padding(.horizontal, 32)
+                                    .padding(.top, 4)
                         }
                         .offset(y: appearAnimation ? 0 : 20)
                         .opacity(appearAnimation ? 1.0 : 0)
@@ -421,3 +382,8 @@ struct ScaleButtonStyle: ButtonStyle {
     }
 }
 
+#Preview {
+    ContentView(isFinishedSplash: .constant(true))
+        .environmentObject(LanguageManager())
+        .environmentObject(ScoreManager())
+}
