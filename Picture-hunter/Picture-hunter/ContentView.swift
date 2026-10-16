@@ -257,19 +257,19 @@ struct CategorySelectionSheet: View {
                 VStack(spacing: 14) {
                     HStack(spacing: 14) {
                         CategoryCard(
-                            title: langManager.text(for: "mode_school"),
-                            subtitle: langManager.text(for: "subtitle_school"),
-                            icon: "graduationcap.fill",
-                            gradientColors: [Color.blue, Color.cyan],
-                            action: { onSelect(.school) }
-                        )
-                        
-                        CategoryCard(
                             title: langManager.text(for: "mode_world"),
                             subtitle: langManager.text(for: "subtitle_world"),
                             icon: "globe.americas.fill",
                             gradientColors: [Color.green, Color.mint],
                             action: { onSelect(.world) }
+                        )
+                        
+                        CategoryCard(
+                            title: langManager.text(for: "mode_school"),
+                            subtitle: langManager.text(for: "subtitle_school"),
+                            icon: "graduationcap.fill",
+                            gradientColors: [Color.blue, Color.cyan],
+                            action: { onSelect(.school) }
                         )
                     }
                     
