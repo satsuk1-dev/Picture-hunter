@@ -110,7 +110,6 @@ class GameModel: ObservableObject {
                     answerJa: ["中国", "ちゅうごく"],
                     answerEn: ["china", "China"],
                     answerMy: ["တရုတ်"]),
-
                         
             Question(imageName: "world_taj_mahal", category: .world,
                      answerJa: ["インド", "いんど"],
@@ -159,7 +158,67 @@ class GameModel: ObservableObject {
             Question(imageName: "halloween_ghost", category: .halloween,
                      answerJa: ["おばけ", "オバケ", "幽霊"],
                      answerEn: ["ghost", "Ghost"],
-                     answerMy: ["သရဲ"])
+                     answerMy: ["သရဲ"]),
+            
+            Question(imageName: "halloween_bat", category: .halloween,
+                     answerJa: ["コウモリ", "こうもり", "バット"],
+                     answerEn: ["bat", "Bat"],
+                     answerMy: ["လင်းနို့"]),
+
+            Question(imageName: "halloween_candy", category: .halloween,
+                     answerJa: ["お菓子", "キャンディ", "飴", "キャンディー", "あめ"],
+                     answerEn: ["candy", "sweets"],
+                     answerMy: ["မုန့်"]),
+
+            Question(imageName: "halloween_skeleton", category: .halloween,
+                     answerJa: ["ガイコツ", "骸骨", "スケルトン", "ほね", "骨"],
+                     answerEn: ["skeleton", "bones"],
+                     answerMy: ["အရိုးစု"]),
+
+            Question(imageName: "halloween_witch_hat", category: .halloween,
+                     answerJa: ["帽子", "魔女の帽子", "ぼうし"],
+                     answerEn: ["witch hat", "hat"],
+                     answerMy: ["ဦးထုပ်"]),
+
+            Question(imageName: "halloween_black_cat", category: .halloween,
+                     answerJa: ["黒猫", "くろねこ", "クロネコ", "猫", "ねこ"],
+                     answerEn: ["black cat", "cat"],
+                     answerMy: ["ကြောင်နက်"]),
+
+            Question(imageName: "halloween_haunted_house", category: .halloween,
+                     answerJa: ["洋館", "お化け屋敷", "おばけやしき", "館"],
+                     answerEn: ["haunted house", "house"],
+                     answerMy: ["သရဲအိမ်"]),
+
+            Question(imageName: "halloween_tombstone", category: .halloween,
+                     answerJa: ["墓", "墓石", "はか"],
+                     answerEn: ["tombstone", "gravestone", "grave"],
+                     answerMy: ["သင်္ချိုင်း"]),
+
+            Question(imageName: "halloween_spider_web", category: .halloween,
+                     answerJa: ["クモの巣", "蜘蛛の巣", "くものす"],
+                     answerEn: ["spider web", "cobweb"],
+                     answerMy: ["ပင်ကူအိမ်"]),
+
+            Question(imageName: "halloween_cauldron", category: .halloween,
+                     answerJa: ["鍋", "大鍋", "なべ"],
+                     answerEn: ["cauldron", "pot"],
+                     answerMy: ["မီးဖိုချောင်အိုး"]),
+
+            Question(imageName: "halloween_vampire", category: .halloween,
+                     answerJa: ["吸血鬼", "きゅうけつき", "ドラキュラ", "バンパイア"],
+                     answerEn: ["vampire", "dracula"],
+                     answerMy: ["စုတ်သွေးသရဲ"]),
+
+            Question(imageName: "halloween_candle", category: .halloween,
+                     answerJa: ["ローソク", "ろうそく", "キャンドル", "燭台"],
+                     answerEn: ["candle", "Candle"],
+                     answerMy: ["ဖယောင်းတိုင်"]),
+
+            Question(imageName: "halloween_broom", category: .halloween,
+                     answerJa: ["ほうき", "ホウキ", "箒"],
+                     answerEn: ["broom", "broomstick"],
+                     answerMy: ["တံမြက်စည်း"])
         ]
     }
     
