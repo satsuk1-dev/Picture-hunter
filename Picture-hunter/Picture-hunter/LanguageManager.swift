@@ -40,7 +40,6 @@ class LanguageManager: ObservableObject {
         "hard": "むずかしい",
         "close": "閉じる",
         
-        // Mode Selection / モード選択
         "select_mode": "モードを選択",
         "subtitle_mode": "テーマを選んでゲームをスタート！",
         "mode_school": "学校",
@@ -52,12 +51,10 @@ class LanguageManager: ObservableObject {
         "mode_halloween": "ハロウィン",
         "subtitle_halloween": "期間限定イベント",
         
-        // Dynamic Question Prompts / モード別設問タイトル
-        "question_school": "ここは学校のどこですか？",
+        "question_school": "この建物は何号館ですか？",
         "question_world": "この写真はどこの国ですか？",
         "question_halloween": "これは何ですか？",
         
-        // In-game
         "score": "スコア",
         "no_score": "まだ記録がありません",
         "pts": "pt",
@@ -87,7 +84,6 @@ class LanguageManager: ObservableObject {
         "hard": "Hard",
         "close": "Close",
         
-        // Mode Selection
         "select_mode": "Select Game Mode",
         "subtitle_mode": "Choose a topic to start playing!",
         "mode_school": "School",
@@ -99,12 +95,10 @@ class LanguageManager: ObservableObject {
         "mode_halloween": "Halloween 🎃",
         "subtitle_halloween": "Spooky event",
         
-        // Dynamic Question Prompts
-        "question_school": "Where in the school is this?",
+        "question_school": "Which building number is this?",
         "question_world": "Which country is this photo from?",
         "question_halloween": "What is this?",
         
-        // In-game
         "score": "Score",
         "no_score": "No scores yet",
         "pts": "pts",
@@ -114,7 +108,6 @@ class LanguageManager: ObservableObject {
         "correct": "Correct!",
         "incorrect": "Incorrect... Try again!",
         
-        // Name entry
         "enter_name_title": "Save Score",
         "enter_name_message": "Enter your nickname for the ranking",
         "name_placeholder": "Nickname",
@@ -136,7 +129,6 @@ class LanguageManager: ObservableObject {
         "hard": "ခက်ခဲသော",
         "close": "ပိတ်မည်",
         
-        // Mode Selection
         "select_mode": "ဂိမ်းမုဒ်ကို ရွေးပါ",
         "subtitle_mode": "ကစားရန် ခေါင်းစဉ်တစ်ခုကို ရွေးပါ",
         "mode_school": "ကျောင်း",
@@ -148,12 +140,10 @@ class LanguageManager: ObservableObject {
         "mode_halloween": "ဟောလိုးဝင်း 🎃",
         "subtitle_halloween": "သရဲပွဲတော် အထူးမုဒ်",
         
-        // Dynamic Question Prompts
-        "question_school": "ဒါကျောင်းရဲ့ ဘယ်နေရာလဲ။",
+        "question_school": "ဒီအဆောက်အအုံက အဆောက်အအုံနံပါတ် ဘယ်လောက်လဲ။",
         "question_world": "ဒီဓာတ်ပုံက ဘယ်နိုင်ငံလဲ။",
         "question_halloween": "ဒါဘာလဲ။",
         
-        // In-game
         "score": "ရမှတ်",
         "no_score": "မှတ်တမ်းမရှိသေးပါ",
         "pts": "မှတ်",
@@ -163,7 +153,6 @@ class LanguageManager: ObservableObject {
         "correct": "မှန်ကန်သည်!",
         "incorrect": "မှားယွင်းသည်...",
         
-        // Name entry
         "enter_name_title": "မှတ်တမ်းသိမ်းမည်",
         "enter_name_message": "အဆင့်သတ်မှတ်ချက်အတွက် နာမည်ထည့်ပါ",
         "name_placeholder": "အမည်",

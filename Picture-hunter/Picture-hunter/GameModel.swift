@@ -52,23 +52,70 @@ class GameModel: ObservableObject {
     
     private func loadMasterQuestions() {
         self.masterQuestionBank = [
-            // --- MODE SCHOOL ---
-            Question(imageName: "school_pencil", category: .school,
-                     answerJa: ["鉛筆", "えんぴつ", "エンピツ"],
-                     answerEn: ["pencil", "Pencil"],
-                     answerMy: ["ခဲတံ"]),
-            Question(imageName: "school_desk", category: .school,
-                     answerJa: ["机", "つくえ", "ツクエ"],
-                     answerEn: ["desk", "Desk"],
-                     answerMy: ["စာပွဲ"]),
-            Question(imageName: "school_eraser", category: .school,
-                     answerJa: ["消しゴム", "けしごむ"],
-                     answerEn: ["eraser", "rubber"],
-                     answerMy: ["ခဲဖျက်"]),
-            Question(imageName: "school_blackboard", category: .school,
-                     answerJa: ["黒板", "こくばん"],
-                     answerEn: ["blackboard", "chalkboard"],
-                     answerMy: ["ကျောက်သင်ပုန်း"]),
+            // --- MODE SCHOOL (1号館 〜 12号館) ---
+            Question(imageName: "school_building_1", category: .school,
+                     answerJa: ["1", "1号館", "１号館", "一号館", "いちごうかん", "イチゴウカン", "1gokan", "1 gokan"],
+                     answerEn: ["building 1", "building1", "1", "no 1", "no.1"],
+                     answerMy: ["၁", "အဆောက်အအုံ ၁"]),
+
+            Question(imageName: "school_building_2", category: .school,
+                     answerJa: ["2", "2号館", "２号館", "二号館", "にごうかん", "ニゴウカン", "2gokan", "2 gokan"],
+                     answerEn: ["building 2", "building2", "2", "no 2", "no.2"],
+                     answerMy: ["၂", "အဆောက်အအုံ ၂"]),
+
+            Question(imageName: "school_building_3", category: .school,
+                     answerJa: ["3", "3号館", "３号館", "三号館", "さんごうかん", "サンゴウカン", "3gokan", "3 gokan"],
+                     answerEn: ["building 3", "building3", "3", "no 3", "no.3"],
+                     answerMy: ["၃", "အဆောက်အအုံ ၃"]),
+
+            Question(imageName: "school_building_4", category: .school,
+                     answerJa: ["4", "4号館", "４号館", "四号館", "よんごうかん", "しごうかん", "ヨンゴウカン", "4gokan", "4 gokan"],
+                     answerEn: ["building 4", "building4", "4", "no 4", "no.4"],
+                     answerMy: ["၄", "အဆောက်အအုံ ၄"]),
+
+            Question(imageName: "school_building_5", category: .school,
+                     answerJa: ["5", "5号館", "５号館", "五号館", "ごごうかん", "ゴゴウカン", "5gokan", "5 gokan"],
+                     answerEn: ["building 5", "building5", "5", "no 5", "no.5"],
+                     answerMy: ["၅", "အဆောက်အအုံ ၅"]),
+
+            Question(imageName: "school_building_6", category: .school,
+                     answerJa: ["6", "6号館", "６号館", "六号館", "ろくごうかん", "ロクゴウカン", "6gokan", "6 gokan"],
+                     answerEn: ["building 6", "building6", "6", "no 6", "no.6"],
+                     answerMy: ["၆", "အဆောက်အအုံ ၆"]),
+
+            Question(imageName: "school_building_7", category: .school,
+                     answerJa: ["7", "7号館", "７号館", "七号館", "ななごうかん", "しちごうかん", "ナナゴウカン", "7gokan", "7 gokan"],
+                     answerEn: ["building 7", "building7", "7", "no 7", "no.7"],
+                     answerMy: ["၇", "အဆောက်အအုံ ၇"]),
+
+            Question(imageName: "school_building_8", category: .school,
+                     answerJa: ["8", "8号館", "８号館", "八号館", "はちごうかん", "ハチゴウカン", "8gokan", "8 gokan"],
+                     answerEn: ["building 8", "building8", "8", "no 8", "no.8"],
+                     answerMy: ["၈", "အဆောက်အအုံ ၈"]),
+
+            Question(imageName: "school_building_9", category: .school,
+                     answerJa: ["9", "9号館", "９号館", "九号館", "きゅうごうかん", "くごうかん", "キュウゴウカン", "9gokan", "9 gokan"],
+                     answerEn: ["building 9", "building9", "9", "no 9", "no.9"],
+                     answerMy: ["၉", "အဆောက်အအုံ ၉"]),
+
+            Question(imageName: "school_building_10", category: .school,
+                     answerJa: ["10", "10号館", "１０号館", "十号館", "じゅうごうかん", "ジュウゴウカン", "10gokan", "10 gokan"],
+                     answerEn: ["building 10", "building10", "10", "no 10", "no.10"],
+                     answerMy: ["၁၀", "အဆောက်အအုံ ၁၀"]),
+
+            Question(imageName: "school_building_11", category: .school,
+                     answerJa: ["11", "11号館", "１１号館", "十一号館", "じゅういちごうかん", "ジュウイチゴウカン", "11gokan", "11 gokan"],
+                     answerEn: ["building 11", "building11", "11", "no 11", "no.11"],
+                     answerMy: ["၁၁", "အဆောက်အအုံ ၁၁"]),
+
+            Question(imageName: "school_building_12", category: .school,
+                     answerJa: ["12", "12号館", "１２号館", "十二号館", "じゅうにごうかん", "ジュウニゴウカン", "12gokan", "12 gokan"],
+                     answerEn: ["building 12", "building12", "12", "no 12", "no.12"],
+                     answerMy: ["၁၂", "အဆောက်အအုံ ၁၂"]),
+            Question(imageName: "school_career_center", category: .school,
+                     answerJa: ["キャリアセンター", "きゃりあせんたー", "キャリア", "就職課", "しゅうしょくか", "career center", "careercenter"],
+                     answerEn: ["career center", "careercenter", "career"],
+                     answerMy: ["အလုပ်အကိုင်ရှာဖွေရေးစင်တာ"]),
                      
             // --- MODE WORLD ---
             Question(imageName: "world_eiffel_tower", category: .world,
@@ -95,56 +142,42 @@ class GameModel: ObservableObject {
                      answerJa: ["シンガポール", "しんがぽーる"],
                      answerEn: ["singapore", "Singapore"],
                      answerMy: ["စင်ကာပူ"]),
-
             Question(imageName: "world_sagrada_familia", category: .world,
                      answerJa: ["スペイン", "すぺいん"],
                      answerEn: ["spain", "Spain"],
                      answerMy: ["စပိန်"]),
-
             Question(imageName: "world_CN_tower", category: .world,
                      answerJa: ["カナダ", "かなだ"],
                      answerEn: ["canada", "Canada"],
                      answerMy: ["ကနေဒါ"]),
-            
             Question(imageName: "world_great_wall", category: .world,
-                    answerJa: ["中国", "ちゅうごく"],
-                    answerEn: ["china", "China"],
-                    answerMy: ["တရုတ်"]),
-                        
+                     answerJa: ["中国", "ちゅうごく"],
+                     answerEn: ["china", "China"],
+                     answerMy: ["တရုတ်"]),
             Question(imageName: "world_taj_mahal", category: .world,
                      answerJa: ["インド", "いんど"],
                      answerEn: ["india", "India"],
                      answerMy: ["အိန္ဒိယ"]),
-
-                        
             Question(imageName: "world_big_ben", category: .world,
-                    answerJa: ["イギリス", "いぎりす", "英国"],
-                    answerEn: ["uk","UK", "united kingdom", "england"],
-                    answerMy: ["ဗြိတိန်"]),
-
-                        
+                     answerJa: ["イギリス", "いぎりす", "米国"],
+                     answerEn: ["uk","UK", "united kingdom", "england"],
+                     answerMy: ["ဗြိတိန်"]),
             Question(imageName: "world_sydney_opera", category: .world,
-                    answerJa: ["オーストラリア", "おーすとらりあ"],
-                    answerEn: ["australia", "Australia"],
-                    answerMy: ["ဩစတြေးလျ"]),
-
-                        
+                     answerJa: ["オーストラリア", "おーすとらりあ"],
+                     answerEn: ["australia", "Australia"],
+                     answerMy: ["ဩစတြေးလျ"]),
             Question(imageName: "world_christ_redeemer", category: .world,
-                    answerJa: ["ブラジル", "ぶらじる"],
-                    answerEn: ["brazil", "Brazil"],
-                    answerMy: ["ဘရာဇီး"]),
-
-
+                     answerJa: ["ブラジル", "ぶらじる"],
+                     answerEn: ["brazil", "Brazil"],
+                     answerMy: ["ဘရာဇီး"]),
             Question(imageName: "world_shwedagon", category: .world,
-                    answerJa: ["ミャンマー", "みゃんまー", "ビルマ"],
-                    answerEn: ["myanmar", "burma"],
-                    answerMy: ["မြန်မာ"]),
-
+                     answerJa: ["ミャンマー", "みゃんまー", "ビルマ"],
+                     answerEn: ["myanmar", "burma"],
+                     answerMy: ["မြန်မာ"]),
             Question(imageName: "world_switzerland", category: .world,
-                    answerJa: ["スイス", "すいす"],
-                    answerEn: ["switzerland", "Switzerland"],
-                    answerMy: ["ဆူဇာလန်"]),
-
+                     answerJa: ["スイス", "すいす"],
+                     answerEn: ["switzerland", "Switzerland"],
+                     answerMy: ["ဆူဇာလန်"]),
                      
             // --- MODE HALLOWEEN ---
             Question(imageName: "halloween_jacko", category: .halloween,
@@ -159,62 +192,50 @@ class GameModel: ObservableObject {
                      answerJa: ["おばけ", "オバケ", "幽霊"],
                      answerEn: ["ghost", "Ghost"],
                      answerMy: ["သရဲ"]),
-            
             Question(imageName: "halloween_bat", category: .halloween,
                      answerJa: ["コウモリ", "こうもり", "バット"],
                      answerEn: ["bat", "Bat"],
                      answerMy: ["လင်းနို့"]),
-
             Question(imageName: "halloween_candy", category: .halloween,
                      answerJa: ["お菓子", "キャンディ", "飴", "キャンディー", "あめ"],
                      answerEn: ["candy", "sweets"],
                      answerMy: ["မုန့်"]),
-
             Question(imageName: "halloween_skeleton", category: .halloween,
                      answerJa: ["ガイコツ", "骸骨", "スケルトン", "ほね", "骨"],
                      answerEn: ["skeleton", "bones"],
                      answerMy: ["အရိုးစု"]),
-
             Question(imageName: "halloween_witch_hat", category: .halloween,
                      answerJa: ["帽子", "魔女の帽子", "ぼうし"],
                      answerEn: ["witch hat", "hat"],
                      answerMy: ["ဦးထုပ်"]),
-
             Question(imageName: "halloween_cat", category: .halloween,
                      answerJa: ["黒猫", "くろねこ", "クロネコ", "猫", "ねこ"],
                      answerEn: ["black cat", "cat"],
                      answerMy: ["ကြောင်နက်"]),
-
             Question(imageName: "halloween_haunted_house", category: .halloween,
                      answerJa: ["洋館", "お化け屋敷", "おばけやしき", "館"],
                      answerEn: ["haunted house", "house"],
                      answerMy: ["သရဲအိမ်"]),
-
             Question(imageName: "halloween_tombstone", category: .halloween,
                      answerJa: ["墓", "墓石", "はか"],
                      answerEn: ["tombstone", "gravestone", "grave"],
                      answerMy: ["သင်္ချိုင်း"]),
-
             Question(imageName: "halloween_spider_web", category: .halloween,
                      answerJa: ["クモの巣", "蜘蛛の巣", "くものす"],
                      answerEn: ["spider web", "cobweb"],
                      answerMy: ["ပင်ကူအိမ်"]),
-
             Question(imageName: "halloween_cauldron", category: .halloween,
                      answerJa: ["鍋", "大鍋", "なべ"],
                      answerEn: ["cauldron", "pot"],
                      answerMy: ["မီးဖိုချောင်အိုး"]),
-
             Question(imageName: "halloween_vampire", category: .halloween,
                      answerJa: ["吸血鬼", "きゅうけつき", "ドラキュラ", "バンパイア"],
                      answerEn: ["vampire", "dracula"],
                      answerMy: ["စုတ်သွေးသရဲ"]),
-
             Question(imageName: "halloween_candle", category: .halloween,
                      answerJa: ["ローソク", "ろうそく", "キャンドル", "燭台"],
                      answerEn: ["candle", "Candle"],
                      answerMy: ["ဖယောင်းတိုင်"]),
-
             Question(imageName: "halloween_broom", category: .halloween,
                      answerJa: ["ほうき", "ホウキ", "箒"],
                      answerEn: ["broom", "broomstick"],
