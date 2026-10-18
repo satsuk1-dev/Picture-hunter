@@ -112,10 +112,6 @@ class GameModel: ObservableObject {
                      answerJa: ["12", "12号館", "１２号館", "十二号館", "じゅうにごうかん", "ジュウニゴウカン", "12gokan", "12 gokan"],
                      answerEn: ["building 12", "building12", "12", "no 12", "no.12"],
                      answerMy: ["၁၂", "အဆောက်အအုံ ၁၂"]),
-            Question(imageName: "school_career_center", category: .school,
-                     answerJa: ["キャリアセンター", "きゃりあせんたー", "キャリア", "就職課", "しゅうしょくか", "career center", "careercenter"],
-                     answerEn: ["career center", "careercenter", "career"],
-                     answerMy: ["အလုပ်အကိုင်ရှာဖွေရေးစင်တာ"]),
                      
             // --- MODE WORLD ---
             Question(imageName: "world_eiffel_tower", category: .world,
