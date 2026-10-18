@@ -22,6 +22,18 @@ struct RankingView: View {
                     
                     Spacer()
                     
+                    // Bouton de réinitialisation des scores
+                    if !scoreManager.highScores.isEmpty {
+                        Button(action: {
+                            scoreManager.resetScores()
+                        }) {
+                            Image(systemName: "trash.fill")
+                                .font(.title2)
+                                .foregroundColor(.red.opacity(0.8))
+                        }
+                        .padding(.trailing, 10)
+                    }
+                    
                     Button(action: { dismiss() }) {
                         Image(systemName: "xmark.circle.fill")
                             .font(.title)
@@ -33,7 +45,7 @@ struct RankingView: View {
                 
                 if scoreManager.highScores.isEmpty {
                     Spacer()
-                    Text(langManager.text(for: "no_scores"))
+                    Text(langManager.text(for: "no_score"))
                         .foregroundColor(.white.opacity(0.7))
                         .font(.headline)
                     Spacer()

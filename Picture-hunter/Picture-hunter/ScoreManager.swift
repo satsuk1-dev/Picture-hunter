@@ -46,6 +46,11 @@ class ScoreManager: ObservableObject {
         saveScores()
     }
     
+    func resetScores() {
+        highScores.removeAll()
+        UserDefaults.standard.removeObject(forKey: saveKey)
+    }
+    
     private func saveScores() {
         if let encoded = try? JSONEncoder().encode(highScores) {
             UserDefaults.standard.set(encoded, forKey: saveKey)
