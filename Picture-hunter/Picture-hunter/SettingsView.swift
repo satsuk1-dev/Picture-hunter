@@ -52,12 +52,12 @@ struct SettingsView: View {
                 
                 Spacer()
                 
-                // MARK: - Titre de Section
+                //  Titre de Section
                 Text(langManager.text(for: "language"))
                     .font(.system(size: 24, weight: .bold, design: .rounded))
                     .foregroundColor(.white.opacity(0.9))
                 
-                // MARK: - Boutons de Langue (Style Arcade)
+                //  Boutons de Langue (Style Arcade)
                 VStack(spacing: 16) {
                     ForEach(languages) { option in
                         let isSelected = (langManager.selectedLanguage == option.language)

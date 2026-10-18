@@ -31,7 +31,7 @@ class GameModel: ObservableObject {
     @Published var currentIndex: Int = 0
     @Published var currentZoomScale: CGFloat = 5.0
     
-    @Published var totalScore: Int = 0          // Score total (100 pts par image)
+    @Published var totalScore: Int = 0          
     @Published var globalTimeRemaining: Int = 60 // 60 secondes
     @Published var correctCount: Int = 0        // Nombre d'images trouvées
     

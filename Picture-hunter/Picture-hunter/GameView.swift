@@ -36,7 +36,7 @@ struct GameView: View {
             
             VStack(spacing: 16) {
                 
-                // MARK: - 1. Header — Found images + 60s timer / ヘッダー — 発見数 + 60秒タイマー
+                // 1. Header — Found images + 60s timer 
                 HStack {
                     HStack(spacing: 8) {
                         Image(systemName: "photo.stack.fill")
@@ -75,7 +75,7 @@ struct GameView: View {
                 
                 Spacer()
                 
-                // MARK: - Mode Question Header / モード別質問テキスト
+                // Mode Question Header / モード別質問テキスト
                 Text(langManager.text(for: questionPromptKey))
                     .font(.system(.title3, design: .rounded))
                     .fontWeight(.bold)
@@ -83,7 +83,7 @@ struct GameView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 16)
                 
-                // MARK: - 2. Photo Area — Dynamic zoom-out / 写真エリア — 動的ズームアウト
+                // Photo Area — Dynamic zoom-out / 写真エリア — 動的ズームアウト
                 ZStack {
                     RoundedRectangle(cornerRadius: 24)
                         .fill(Color(white: 0.2))
@@ -129,7 +129,7 @@ struct GameView: View {
                 
                 Spacer()
                 
-                // MARK: - 3. Input & Controls / 入力と操作
+                //  Input & Controls / 入力と操作
                 VStack(spacing: 12) {
                     HStack(spacing: 10) {
                         TextField(langManager.text(for: "type_answer"), text: $inputAnswer)

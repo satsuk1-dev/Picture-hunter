@@ -21,7 +21,6 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                //  Dynamic modern gradient background / 動的でモダンなグラデーション背景
                 LinearGradient(
                     colors: [
                         Color(red: 0.1, green: 0.05, blue: 0.25),
@@ -32,7 +31,7 @@ struct ContentView: View {
                 )
                 .ignoresSafeArea()
                 
-                //  Background glow effects (Glow Orbs) / 背景のグロー効果（グローオーブ）
+                //  Background glow effects with bubble
                 ZStack {
                     Circle()
                         .fill(Color.purple.opacity(0.4))
@@ -53,7 +52,7 @@ struct ContentView: View {
                 }
                 
                 VStack(spacing: 0) {
-                    // 🏠 Header (Home Button) / ヘッダー（ホームボタン）
+                    //  Header (Home Button)
                     HStack {
                         Button(action: {
                             withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
@@ -79,7 +78,7 @@ struct ContentView: View {
                     
                     Spacer()
                     
-                    // 📸 Logo & Main title / ロゴとメインタイトル
+                    // Logo & Main title
                     VStack(spacing: 16) {
                         
                         VStack(spacing: 8) {
@@ -106,7 +105,7 @@ struct ContentView: View {
                     
                     Spacer()
                     
-                    // 🎮 Main menu / メインメニュー
+                    // Main menu
                     VStack(spacing: 16) {
                         // Play button / 再生ボタン
                         Button(action: { showCategoryPicker = true }) {
@@ -127,7 +126,7 @@ struct ContentView: View {
                         }
                         .buttonStyle(ScaleButtonStyle())
                         
-                        // Ranking button / ランキングボタン
+                        // Ranking button
                         Button(action: { showRankingScreen = true }) {
                             HStack(spacing: 10) {
                                 Image(systemName: "trophy.fill")
@@ -147,7 +146,7 @@ struct ContentView: View {
                         }
                         .buttonStyle(ScaleButtonStyle())
                         
-                        // Settings button / 設定ボタン
+                        // Settings button
                         Button(action: { showSettingsScreen = true }) {
                             HStack(spacing: 10) {
                                 Image(systemName: "gearshape.fill")
@@ -184,7 +183,7 @@ struct ContentView: View {
                     .environmentObject(langManager)
                     .environmentObject(scoreManager)
             }
-            // Mode selection modal / モード選択モーダル
+            // Mode selection modal
             .sheet(isPresented: $showCategoryPicker) {
                 CategorySelectionSheet(
                     selectedCategory: $selectedCategory,
@@ -213,7 +212,7 @@ struct ContentView: View {
     }
 }
 
-// MARK: - Trilingual Mode Selection Modal / 3言語対応のモード選択モーダル
+// Trilingual Mode Selection Modal
 struct CategorySelectionSheet: View {
     @EnvironmentObject var langManager: LanguageManager
     @Binding var selectedCategory: GameCategory
@@ -282,7 +281,7 @@ struct CategorySelectionSheet: View {
     }
 }
 
-// MARK: - Interactive Mode Card / インタラクティブなモードカード
+//Interactive Mode Card
 struct CategoryCard: View {
     let title: String
     let subtitle: String
@@ -365,7 +364,7 @@ struct CategoryCard: View {
     }
 }
 
-// MARK: - Touch Press Animation (Premium Spring Effect) / タッチプレスアニメーション（高品質スプリング効果）
+// Touch Press Animation  
 struct ScaleButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
