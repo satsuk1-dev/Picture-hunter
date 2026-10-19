@@ -7,8 +7,8 @@ struct GameView: View {
     @Environment(\.dismiss) var dismiss
     
     let category: GameCategory
+    var onExit: (() -> Void)? = nil
     @StateObject private var gameModel = GameModel()
-    
     @State private var inputAnswer: String = ""
     @State private var playerName: String = ""
     @State private var showNameInputDialog = false
@@ -39,7 +39,21 @@ struct GameView: View {
             VStack(spacing: 16) {
                 
                 // 1. Header — Found images + 60s timer
-                HStack {
+                // 1. Header — Back + Found images + 60s timer
+                HStack(spacing: 10) {
+                    // 変更後
+                    Button(action: exitGame) {
+                        Image(systemName: "chevron.left")
+                            .font(.title3.weight(.semibold))
+                            .foregroundColor(.white)
+                            .frame(width: 48, height: 48)
+                            .background(Color.white.opacity(0.1))
+                            .clipShape(Circle())
+                            .contentShape(Circle())
+                    }
+                    .buttonStyle(.plain)
+                    
+                    // 正解枚数
                     HStack(spacing: 8) {
                         Image(systemName: "photo.stack.fill")
                             .foregroundColor(.green)
@@ -74,6 +88,7 @@ struct GameView: View {
                 }
                 .padding(.horizontal)
                 .padding(.top, 10)
+
                 
                 Spacer()
                 
@@ -116,6 +131,18 @@ struct GameView: View {
                 .frame(width: 340, height: 340)
                 .cornerRadius(24)
                 .clipped()
+                .allowsHitTesting(false)
+                
+                // ↓ ここから追加(デバッグ用:答えを表示)
+                #if DEBUG
+                if let question = gameModel.currentQuestion {
+                    Text("答え: " + question.allAnswers.joined(separator: " / "))
+                        .font(.caption)
+                        .foregroundColor(.yellow)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 16)
+                }
+                #endif
                 
                 // Feedback (Correct / Incorrect) / フィードバック（正解 / 不正解）
                 if let isCorrect = gameModel.isCorrectAnswer {
@@ -223,6 +250,7 @@ struct GameView: View {
                 .padding(.horizontal, 8)
             }
         }
+        .toolbar(.hidden, for: .navigationBar)
         .onAppear {
             inputAnswer = ""
             gameModel.setupAndStartGame(category: category)
@@ -256,4 +284,15 @@ struct GameView: View {
         let _ = gameModel.checkAnswer(inputAnswer)
         inputAnswer = ""
     }
+    
+    // ↓ ここから追加
+        private func exitGame() {
+            isInputFocused = false
+            gameModel.stopGame()
+            if let onExit {
+                onExit()
+            } else {
+                dismiss()
+            }
+        }
 }

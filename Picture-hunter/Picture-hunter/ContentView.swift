@@ -178,12 +178,14 @@ struct ContentView: View {
                     appearAnimation = true
                 }
             }
+            // 変更後
             .navigationDestination(isPresented: $showGameScreen) {
-                GameView(category: selectedCategory)
-                    .environmentObject(langManager)
-                    .environmentObject(scoreManager)
-            }
-            // Mode selection modal
+                GameView(category: selectedCategory, onExit: {
+                    showGameScreen = false
+                })
+                .environmentObject(langManager)
+                .environmentObject(scoreManager)
+            }            // Mode selection modal
             .sheet(isPresented: $showCategoryPicker) {
                 CategorySelectionSheet(
                     selectedCategory: $selectedCategory,
