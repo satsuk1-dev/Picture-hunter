@@ -129,10 +129,12 @@ struct GameView: View {
                             .foregroundColor(.gray)
                     }
                 }
-                .frame(width: 340, height: 340)
+                // 変更後
+                .frame(width: isInputFocused ? 200 : 340, height: isInputFocused ? 200 : 340)
                 .cornerRadius(24)
                 .clipped()
                 .allowsHitTesting(false)
+                .animation(.easeInOut(duration: 0.25), value: isInputFocused)
                 
                 // デバッグ用:答えを表示
                 #if DEBUG
