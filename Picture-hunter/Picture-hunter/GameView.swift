@@ -13,6 +13,8 @@ struct GameView: View {
     @State private var playerName: String = ""
     @State private var showNameInputDialog = false
     
+    // 1. Focus state pour détecter quand le clavier est ouvert
+    @FocusState private var isInputFocused: Bool
     
     private var questionPromptKey: String {
         switch category {
@@ -36,7 +38,7 @@ struct GameView: View {
             
             VStack(spacing: 16) {
                 
-                // 1. Header — Found images + 60s timer 
+                // 1. Header — Found images + 60s timer
                 HStack {
                     HStack(spacing: 8) {
                         Image(systemName: "photo.stack.fill")
@@ -129,10 +131,11 @@ struct GameView: View {
                 
                 Spacer()
                 
-                //  Input & Controls / 入力と操作
+                // Input & Controls / 入力と操作
                 VStack(spacing: 12) {
                     HStack(spacing: 10) {
                         TextField(langManager.text(for: "type_answer"), text: $inputAnswer)
+                            .focused($isInputFocused) // Lier le focus
                             .padding()
                             .background(Color(white: 0.2))
                             .cornerRadius(12)
@@ -193,6 +196,31 @@ struct GameView: View {
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 20)
+            }
+        }
+        // 2. Toolbar au-dessus du clavier (pour les petits écrans)
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                HStack {
+                    Text("入力中:")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                    
+                    Text(inputAnswer.isEmpty ? "..." : inputAnswer)
+                        .font(.body)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                    
+                    Spacer()
+                    
+                    Button("OK") {
+                        submitAnswer()
+                        isInputFocused = false
+                    }
+                    .fontWeight(.bold)
+                    .foregroundColor(.blue)
+                }
+                .padding(.horizontal, 8)
             }
         }
         .onAppear {
