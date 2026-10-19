@@ -129,46 +129,57 @@ struct RankingView: View {
     }
 
     @ViewBuilder
-    private var rankingListView: some View {
-        let filteredScores = scoreManager.scores(for: selectedCategory)
+        private var rankingListView: some View {
+            let filteredScores = scoreManager.highScores.filter { item in
+                let cat = item.category.lowercased()
+                switch selectedCategory {
+                case "世界":
+                    return cat == "世界" || cat == "world"
+                case "学校":
+                    return cat == "学校" || cat == "school"
+                case "ハロウィン":
+                    return cat == "ハロウィン" || cat == "halloween"
+                default:
+                    return cat == selectedCategory.lowercased()
+                }
+            }.sorted { $0.score > $1.score }
 
-        if filteredScores.isEmpty {
-            Spacer()
-            Text(langManager.text(for: "no_score"))
-                .foregroundColor(.white.opacity(0.7))
-                .font(.body)
-            Spacer()
-        } else {
-            ScrollView {
-                VStack(spacing: 10) {
-                    ForEach(Array(filteredScores.prefix(10).enumerated()), id: \.element.id) { index, item in
-                        HStack {
-                            Text("\(index + 1)")
-                                .font(.title3)
-                                .bold()
-                                .frame(width: 50, alignment: .leading)
+            if filteredScores.isEmpty {
+                Spacer()
+                Text(langManager.text(for: "no_score"))
+                    .foregroundColor(.white.opacity(0.7))
+                    .font(.body)
+                Spacer()
+            } else {
+                ScrollView {
+                    VStack(spacing: 10) {
+                        ForEach(Array(filteredScores.prefix(10).enumerated()), id: \.element.id) { index, item in
+                            HStack {
+                                Text("\(index + 1)")
+                                    .font(.title3)
+                                    .bold()
+                                    .frame(width: 50, alignment: .leading)
 
-                            Text(item.name)
-                                .font(.headline)
-                                .lineLimit(1)
+                                Text(item.name)
+                                    .font(.headline)
+                                    .lineLimit(1)
 
-                            Spacer()
+                                Spacer()
 
-                            Text("\(item.score)")
-                                .font(.title3)
-                                .bold()
-                                .frame(width: 60, alignment: .trailing)
+                                Text("\(item.score)")
+                                    .font(.title3)
+                                    .bold()
+                                    .frame(width: 60, alignment: .trailing)
+                            }
+                            .padding()
+                            .background(Color.white.opacity(0.15))
+                            .foregroundColor(.white)
+                            .cornerRadius(12)
                         }
-                        .padding()
-                        .background(Color.white.opacity(0.15))
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
                     }
                 }
             }
         }
-    }
-
     private var homeButton: some View {
         Button {
             dismiss()
