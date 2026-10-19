@@ -12,8 +12,8 @@ struct GameView: View {
     @State private var inputAnswer: String = ""
     @State private var playerName: String = ""
     @State private var showNameInputDialog = false
+    @State private var showTotalScoreView = false
     
-    // 1. Focus state pour détecter quand le clavier est ouvert
     @FocusState private var isInputFocused: Bool
     
     private var questionPromptKey: String {
@@ -37,6 +37,7 @@ struct GameView: View {
             .ignoresSafeArea()
             
             VStack(spacing: 16) {
+
                 
                 // 1. Header — Found images + 60s timer
                 // 1. Header — Back + Found images + 60s timer
@@ -54,6 +55,7 @@ struct GameView: View {
                     .buttonStyle(.plain)
                     
                     // 正解枚数
+
                     HStack(spacing: 8) {
                         Image(systemName: "photo.stack.fill")
                             .foregroundColor(.green)
@@ -71,7 +73,6 @@ struct GameView: View {
                     
                     Spacer()
                     
-                    // 60s countdown / 60秒カウントダウン
                     HStack(spacing: 6) {
                         Image(systemName: "clock.fill")
                             .foregroundColor(gameModel.globalTimeRemaining <= 10 ? .red : .orange)
@@ -92,7 +93,7 @@ struct GameView: View {
                 
                 Spacer()
                 
-                // Mode Question Header / モード別質問テキスト
+                // Question Header
                 Text(langManager.text(for: questionPromptKey))
                     .font(.system(.title3, design: .rounded))
                     .fontWeight(.bold)
@@ -100,7 +101,7 @@ struct GameView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 16)
                 
-                // Photo Area — Dynamic zoom-out / 写真エリア — 動的ズームアウト
+                // Photo Area
                 ZStack {
                     RoundedRectangle(cornerRadius: 24)
                         .fill(Color(white: 0.2))
@@ -133,7 +134,7 @@ struct GameView: View {
                 .clipped()
                 .allowsHitTesting(false)
                 
-                // ↓ ここから追加(デバッグ用:答えを表示)
+                // デバッグ用:答えを表示
                 #if DEBUG
                 if let question = gameModel.currentQuestion {
                     Text("答え: " + question.allAnswers.joined(separator: " / "))
@@ -144,7 +145,7 @@ struct GameView: View {
                 }
                 #endif
                 
-                // Feedback (Correct / Incorrect) / フィードバック（正解 / 不正解）
+                // Feedback
                 if let isCorrect = gameModel.isCorrectAnswer {
                     Text(isCorrect ? langManager.text(for: "correct") : langManager.text(for: "incorrect"))
                         .font(.title2)
@@ -158,11 +159,11 @@ struct GameView: View {
                 
                 Spacer()
                 
-                // Input & Controls / 入力と操作
+                // Input & Controls
                 VStack(spacing: 12) {
                     HStack(spacing: 10) {
                         TextField(langManager.text(for: "type_answer"), text: $inputAnswer)
-                            .focused($isInputFocused) // Lier le focus
+                            .focused($isInputFocused)
                             .padding()
                             .background(Color(white: 0.2))
                             .cornerRadius(12)
@@ -190,7 +191,6 @@ struct GameView: View {
                         .disabled(inputAnswer.isEmpty)
                     }
                     
-                    // Controls — Skip & Pause / 操作 — スキップと一時停止
                     HStack(spacing: 20) {
                         Button(action: {
                             gameModel.skipQuestion()
@@ -225,7 +225,6 @@ struct GameView: View {
                 .padding(.bottom, 20)
             }
         }
-        // 2. Toolbar au-dessus du clavier (pour les petits écrans)
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 HStack {
@@ -272,10 +271,24 @@ struct GameView: View {
                 
                 scoreManager.addScore(name: nameToSave, score: gameModel.correctCount)
                 playerName = ""
-                dismiss()
+                showTotalScoreView = true
             }
         } message: {
             Text("60秒で \(gameModel.correctCount) 枚の画像を当てました！")
+        }
+        .sheet(isPresented: $showTotalScoreView) {
+            TotalscoreView(
+                score: gameModel.correctCount,
+                correctAnswers: gameModel.correctCount,
+                totalQuestions: gameModel.activeQuestions.count,
+                bestScore: scoreManager.highScores.first?.score ?? gameModel.correctCount,
+                onRestart: {
+                    gameModel.setupAndStartGame(category: category)
+                },
+                onHome: {
+                    dismiss()
+                }
+            )
         }
     }
     
@@ -285,7 +298,6 @@ struct GameView: View {
         inputAnswer = ""
     }
     
-    // ↓ ここから追加
         private func exitGame() {
             isInputFocused = false
             gameModel.stopGame()
