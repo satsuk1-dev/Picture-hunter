@@ -156,11 +156,11 @@ struct TotalscoreView: View {
     
     var resultMessage: String {
         if score >= 15 {
-            return "Excellent! 🎉"
+            return "Excellent!"
         } else if score >= 5 {
-            return "Good Job! 👏"
+            return "Good Job!"
         } else {
-            return "Try Again! 💪"
+            return "Try Again!"
         }
     }
 }
