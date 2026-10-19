@@ -7,6 +7,7 @@ struct TotalscoreView: View {
     var bestScore: Int
     
     var onRestart: () -> Void
+    var onHome: () -> Void
     
     @Environment(\.dismiss) private var dismiss
     
@@ -115,6 +116,7 @@ struct TotalscoreView: View {
                     HStack(spacing: 12) {
                         Button {
                             dismiss()
+                            onHome()
                         } label: {
                             Label("ホーム", systemImage: "house.fill")
                                 .font(.system(.body, design: .rounded))
@@ -169,6 +171,7 @@ struct TotalscoreView: View {
         correctAnswers: 8,
         totalQuestions: 15,
         bestScore: 12,
-        onRestart: {}
+        onRestart: {},
+        onHome: {}
     )
 }
