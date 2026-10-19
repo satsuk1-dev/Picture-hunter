@@ -23,7 +23,6 @@ struct TotalscoreView: View {
             .ignoresSafeArea()
             
             VStack(spacing: 24) {
-                // Header Titles
                 VStack(spacing: 6) {
                     Text("TOTAL RESULT")
                         .font(.system(.subheadline, design: .rounded))
@@ -40,8 +39,7 @@ struct TotalscoreView: View {
                         .foregroundColor(.white.opacity(0.8))
                 }
                 .padding(.top, 10)
-                
-                // Score Box (Glassmorphism Container)
+            
                 VStack(spacing: 10) {
                     Text("TOTAL SCORE")
                         .font(.system(.caption, design: .rounded))
