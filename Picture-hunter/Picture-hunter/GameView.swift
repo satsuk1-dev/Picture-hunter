@@ -13,7 +13,10 @@ struct GameView: View {
     @State private var playerName: String = ""
     @State private var showNameInputDialog = false
     
-    // 1. Focus state pour détecter quand le clavier est ouvert
+    // 1. Variable d'état pour ouvrir TotalscoreView
+    @State private var showTotalScoreView = false
+    
+    // Focus state pour détecter quand le clavier est ouvert
     @FocusState private var isInputFocused: Bool
     
     private var questionPromptKey: String {
@@ -135,7 +138,7 @@ struct GameView: View {
                 VStack(spacing: 12) {
                     HStack(spacing: 10) {
                         TextField(langManager.text(for: "type_answer"), text: $inputAnswer)
-                            .focused($isInputFocused) // Lier le focus
+                            .focused($isInputFocused)
                             .padding()
                             .background(Color(white: 0.2))
                             .cornerRadius(12)
@@ -198,7 +201,7 @@ struct GameView: View {
                 .padding(.bottom, 20)
             }
         }
-        // 2. Toolbar au-dessus du clavier (pour les petits écrans)
+        // Toolbar au-dessus du clavier
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 HStack {
@@ -244,10 +247,24 @@ struct GameView: View {
                 
                 scoreManager.addScore(name: nameToSave, score: gameModel.correctCount)
                 playerName = ""
-                dismiss()
+                
+                // 2. Afficher la feuille TotalscoreView une fois le nom sauvegardé
+                showTotalScoreView = true
             }
         } message: {
             Text("60秒で \(gameModel.correctCount) 枚の画像を当てました！")
+        }
+        // 3. Présentation de la modal TotalscoreView avec les vraies données
+        .sheet(isPresented: $showTotalScoreView) {
+            TotalscoreView(
+                score: gameModel.correctCount,
+                correctAnswers: gameModel.correctCount,
+                totalQuestions: gameModel.activeQuestions.count,
+                bestScore: scoreManager.highScores.first?.score ?? gameModel.correctCount,
+                onRestart: {
+                    gameModel.setupAndStartGame(category: category)
+                }
+            )
         }
     }
     
