@@ -269,7 +269,7 @@ struct GameView: View {
                     ? "Player"
                     : playerName
                 
-                scoreManager.addScore(name: nameToSave, score: gameModel.correctCount)
+                scoreManager.addScore(name: nameToSave, score: gameModel.correctCount, category: category.rawValue)
                 playerName = ""
                 showTotalScoreView = true
             }
@@ -281,7 +281,7 @@ struct GameView: View {
                 score: gameModel.correctCount,
                 correctAnswers: gameModel.correctCount,
                 totalQuestions: gameModel.activeQuestions.count,
-                bestScore: scoreManager.highScores.first?.score ?? gameModel.correctCount,
+                bestScore: scoreManager.scores(for: category.rawValue).first?.score ?? gameModel.correctCount,
                 onRestart: {
                     gameModel.setupAndStartGame(category: category)
                 },
@@ -298,13 +298,13 @@ struct GameView: View {
         inputAnswer = ""
     }
     
-        private func exitGame() {
-            isInputFocused = false
-            gameModel.stopGame()
-            if let onExit {
-                onExit()
-            } else {
-                dismiss()
-            }
+    private func exitGame() {
+        isInputFocused = false
+        gameModel.stopGame()
+        if let onExit {
+            onExit()
+        } else {
+            dismiss()
         }
+    }
 }

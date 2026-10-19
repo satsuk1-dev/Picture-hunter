@@ -9,7 +9,11 @@ struct TotalscoreView: View {
     var onRestart: () -> Void
     var onHome: () -> Void
     
+    @EnvironmentObject var langManager: LanguageManager
+    @EnvironmentObject var scoreManager: ScoreManager
     @Environment(\.dismiss) private var dismiss
+    
+    @State private var showResetAlert = false
     
     var body: some View {
         ZStack {
@@ -24,20 +28,37 @@ struct TotalscoreView: View {
             .ignoresSafeArea()
             
             VStack(spacing: 24) {
-                VStack(spacing: 6) {
-                    Text("TOTAL RESULT")
-                        .font(.system(.subheadline, design: .rounded))
-                        .fontWeight(.black)
-                        .foregroundStyle(.blue)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 6)
-                        .background(Color.blue.opacity(0.15))
-                        .clipShape(Capsule())
+                // Header avec Titre et Poubelle
+                ZStack {
+                    VStack(spacing: 6) {
+                        Text("TOTAL RESULT")
+                            .font(.system(.subheadline, design: .rounded))
+                            .fontWeight(.black)
+                            .foregroundStyle(.blue)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 6)
+                            .background(Color.blue.opacity(0.15))
+                            .clipShape(Capsule())
+                        
+                        Text("PICTURE HUNTER")
+                            .font(.system(.title3, design: .rounded))
+                            .fontWeight(.heavy)
+                            .foregroundColor(.white.opacity(0.8))
+                    }
                     
-                    Text("PICTURE HUNTER")
-                        .font(.system(.title3, design: .rounded))
-                        .fontWeight(.heavy)
-                        .foregroundColor(.white.opacity(0.8))
+                    HStack {
+                        Spacer()
+                        Button {
+                            showResetAlert = true
+                        } label: {
+                            Image(systemName: "trash.fill")
+                                .font(.title3)
+                                .foregroundColor(.white.opacity(0.8))
+                                .padding(10)
+                                .background(Color.red.opacity(0.3))
+                                .clipShape(Circle())
+                        }
+                    }
                 }
                 .padding(.top, 10)
             
@@ -74,6 +95,7 @@ struct TotalscoreView: View {
                 Divider()
                     .background(Color.white.opacity(0.2))
                     .padding(.horizontal, 20)
+                
                 HStack(spacing: 30) {
                     VStack(spacing: 6) {
                         Text("正解数")
@@ -112,6 +134,7 @@ struct TotalscoreView: View {
                     .foregroundStyle(score >= 5 ? .green : .orange)
                 
                 Spacer()
+                
                 VStack(spacing: 12) {
                     HStack(spacing: 12) {
                         Button {
@@ -152,6 +175,14 @@ struct TotalscoreView: View {
             }
             .padding(24)
         }
+        .alert(langManager.text(for: "delete_ranking_title"), isPresented: $showResetAlert) {
+            Button(langManager.text(for: "delete_all_rankings"), role: .destructive) {
+                scoreManager.resetAllScores()
+            }
+            Button(langManager.text(for: "cancel"), role: .cancel) {}
+        } message: {
+            Text(langManager.text(for: "delete_ranking_message"))
+        }
     }
     
     var resultMessage: String {
@@ -174,4 +205,6 @@ struct TotalscoreView: View {
         onRestart: {},
         onHome: {}
     )
+    .environmentObject(LanguageManager())
+    .environmentObject(ScoreManager())
 }

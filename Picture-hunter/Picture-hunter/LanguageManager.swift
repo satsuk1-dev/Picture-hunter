@@ -66,7 +66,14 @@ class LanguageManager: ObservableObject {
         "enter_name_title": "スコア登録",
         "enter_name_message": "ランキングに登録するニックネームを入力してください",
         "name_placeholder": "ニックネーム",
-        "save_button": "登録"
+        "save_button": "登録",
+        
+        // --- Poubelle / Clean Scores (3 Langues) ---
+        "delete_ranking_title": "ランキングの削除",
+        "delete_ranking_message": "削除するデータの範囲を選択してください。",
+        "delete_this_category": "このカテゴリのみ削除",
+        "delete_all_rankings": "すべてのランキングを削除",
+        "cancel": "キャンセル"
     ]
     
     private let englishDictionary: [String: String] = [
@@ -92,7 +99,7 @@ class LanguageManager: ObservableObject {
         "subtitle_world": "Famous landmarks",
         "mode_japan": "Japan",
         "subtitle_japan": "Culture & sights",
-        "mode_halloween": "Halloween 🎃",
+        "mode_halloween": "Halloween",
         "subtitle_halloween": "Spooky event",
         
         "question_school": "Which building number is this?",
@@ -111,7 +118,14 @@ class LanguageManager: ObservableObject {
         "enter_name_title": "Save Score",
         "enter_name_message": "Enter your nickname for the ranking",
         "name_placeholder": "Nickname",
-        "save_button": "Save"
+        "save_button": "Save",
+        
+        // --- Poubelle / Clean Scores (3 Langues) ---
+        "delete_ranking_title": "Delete Ranking",
+        "delete_ranking_message": "Please select the range of data to delete.",
+        "delete_this_category": "Delete only this category",
+        "delete_all_rankings": "Delete all rankings",
+        "cancel": "Cancel"
     ]
     
     private let myanmarDictionary: [String: String] = [
@@ -137,7 +151,7 @@ class LanguageManager: ObservableObject {
         "subtitle_world": "ကမ္ဘာကျော်နေရာများ",
         "mode_japan": "ဂျပန်",
         "subtitle_japan": "ဂျပန်ယဉ်ကျေးမှုနှင့် နေရာများ",
-        "mode_halloween": "ဟောလိုးဝင်း 🎃",
+        "mode_halloween": "ဟောလိုးဝင်း",
         "subtitle_halloween": "သရဲပွဲတော် အထူးမုဒ်",
         
         "question_school": "ဒီအဆောက်အအုံက အဆောက်အအုံနံပါတ် ဘယ်လောက်လဲ။",
@@ -156,6 +170,13 @@ class LanguageManager: ObservableObject {
         "enter_name_title": "မှတ်တမ်းသိမ်းမည်",
         "enter_name_message": "အဆင့်သတ်မှတ်ချက်အတွက် နာမည်ထည့်ပါ",
         "name_placeholder": "အမည်",
-        "save_button": "သိမ်းမည်"
+        "save_button": "သိမ်းမည်",
+        
+        // --- Poubelle / Clean Scores (3 Langues) ---
+        "delete_ranking_title": "အဆင့်သတ်မှတ်ချက် ဖျက်မည်",
+        "delete_ranking_message": "ဖျက်လိုသော အချက်အလက်အမျိုးအစားကို ရွေးချယ်ပါ",
+        "delete_this_category": "ဒီကဏ္ဍတစ်ခုတည်းကိုသာ ဖျက်မည်",
+        "delete_all_rankings": "အဆင့်သတ်မှတ်ချက်အားလုံး ဖျက်မည်",
+        "cancel": "မလုပ်တော့ပါ"
     ]
 }
