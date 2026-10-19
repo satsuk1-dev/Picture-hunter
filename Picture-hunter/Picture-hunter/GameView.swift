@@ -12,11 +12,8 @@ struct GameView: View {
     @State private var inputAnswer: String = ""
     @State private var playerName: String = ""
     @State private var showNameInputDialog = false
-    
-    // 1. Variable d'état pour ouvrir TotalscoreView
     @State private var showTotalScoreView = false
     
-    // Focus state pour détecter quand le clavier est ouvert
     @FocusState private var isInputFocused: Bool
     
     private var questionPromptKey: String {
@@ -40,8 +37,7 @@ struct GameView: View {
             .ignoresSafeArea()
             
             VStack(spacing: 16) {
-                
-                // 1. Header — Found images + 60s timer
+                // Header (Score + Chrono)
                 HStack {
                     HStack(spacing: 8) {
                         Image(systemName: "photo.stack.fill")
@@ -60,7 +56,6 @@ struct GameView: View {
                     
                     Spacer()
                     
-                    // 60s countdown / 60秒カウントダウン
                     HStack(spacing: 6) {
                         Image(systemName: "clock.fill")
                             .foregroundColor(gameModel.globalTimeRemaining <= 10 ? .red : .orange)
@@ -80,7 +75,7 @@ struct GameView: View {
                 
                 Spacer()
                 
-                // Mode Question Header / モード別質問テキスト
+                // Question Header
                 Text(langManager.text(for: questionPromptKey))
                     .font(.system(.title3, design: .rounded))
                     .fontWeight(.bold)
@@ -88,7 +83,7 @@ struct GameView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 16)
                 
-                // Photo Area — Dynamic zoom-out / 写真エリア — 動的ズームアウト
+                // Photo Area
                 ZStack {
                     RoundedRectangle(cornerRadius: 24)
                         .fill(Color(white: 0.2))
@@ -120,7 +115,7 @@ struct GameView: View {
                 .cornerRadius(24)
                 .clipped()
                 
-                // Feedback (Correct / Incorrect) / フィードバック（正解 / 不正解）
+                // Feedback
                 if let isCorrect = gameModel.isCorrectAnswer {
                     Text(isCorrect ? langManager.text(for: "correct") : langManager.text(for: "incorrect"))
                         .font(.title2)
@@ -134,7 +129,7 @@ struct GameView: View {
                 
                 Spacer()
                 
-                // Input & Controls / 入力と操作
+                // Input & Controls
                 VStack(spacing: 12) {
                     HStack(spacing: 10) {
                         TextField(langManager.text(for: "type_answer"), text: $inputAnswer)
@@ -166,7 +161,6 @@ struct GameView: View {
                         .disabled(inputAnswer.isEmpty)
                     }
                     
-                    // Controls — Skip & Pause / 操作 — スキップと一時停止
                     HStack(spacing: 20) {
                         Button(action: {
                             gameModel.skipQuestion()
@@ -201,7 +195,6 @@ struct GameView: View {
                 .padding(.bottom, 20)
             }
         }
-        // Toolbar au-dessus du clavier
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 HStack {
@@ -247,14 +240,11 @@ struct GameView: View {
                 
                 scoreManager.addScore(name: nameToSave, score: gameModel.correctCount)
                 playerName = ""
-                
-                // 2. Afficher la feuille TotalscoreView une fois le nom sauvegardé
                 showTotalScoreView = true
             }
         } message: {
             Text("60秒で \(gameModel.correctCount) 枚の画像を当てました！")
         }
-        // 3. Présentation de la modal TotalscoreView avec les vraies données
         .sheet(isPresented: $showTotalScoreView) {
             TotalscoreView(
                 score: gameModel.correctCount,
@@ -263,6 +253,9 @@ struct GameView: View {
                 bestScore: scoreManager.highScores.first?.score ?? gameModel.correctCount,
                 onRestart: {
                     gameModel.setupAndStartGame(category: category)
+                },
+                onHome: {
+                    dismiss()
                 }
             )
         }
