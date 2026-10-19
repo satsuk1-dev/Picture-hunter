@@ -178,7 +178,7 @@ class GameModel: ObservableObject {
             // --- MODE HALLOWEEN ---
             Question(imageName: "halloween_jacko", category: .halloween,
                      answerJa: ["かぼちゃ", "カボチャ", "ジャックオーランタン"],
-                     answerEn: ["pumpkin", "jack-o'-lantern", "jack o lantern"],
+                     answerEn: ["pumpkin", "Pumpkin", "jack-o'-lantern", "jack o lantern"],
                      answerMy: ["ဖရုံသီး"]),
             Question(imageName: "halloween_witch", category: .halloween,
                      answerJa: ["魔女", "まじょ", "マジョ"],
