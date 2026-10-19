@@ -254,7 +254,7 @@ struct GameView: View {
         } message: {
             Text("60秒で \(gameModel.correctCount) 枚の画像を当てました！")
         }
-        // 3. Présentation de la modal TotalscoreView avec les vraies données
+
         .sheet(isPresented: $showTotalScoreView) {
             TotalscoreView(
                 score: gameModel.correctCount,
