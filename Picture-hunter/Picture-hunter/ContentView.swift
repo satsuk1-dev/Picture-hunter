@@ -17,19 +17,16 @@ struct ContentView: View {
     // Animation state
     @State private var isAnimatingBg = false
     @State private var appearAnimation = false
+    @State private var glowPulse = false
     
     var body: some View {
         NavigationStack {
             ZStack {
-                LinearGradient(
-                    colors: [
-                        Color(red: 0.1, green: 0.05, blue: 0.25),
-                        Color(red: 0.05, green: 0.15, blue: 0.35)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .ignoresSafeArea()
+                    // 変更後
+                    Color.black
+                        .ignoresSafeArea()
+
+                    StarField()
                 
                 //  Background glow effects with bubble
                 ZStack {
@@ -81,25 +78,30 @@ struct ContentView: View {
                     // Logo & Main title
                     VStack(spacing: 16) {
                         
-                        VStack(spacing: 8) {
+                        VStack(spacing: -100) {
                             Image("Picture-hunterTitle")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 280)
+                                .frame(width: 360)
+                                .background {
+                                        Circle()
+                                        .fill(Color.white.opacity(0.25))
+                                            .frame(width: 300, height: 300)
+                                            .blur(radius: 50)
+                                            .scaleEffect(glowPulse ? 1.15 : 0.9)
+                                            .opacity(glowPulse ? 1.0 : 0.7)
+                                            .allowsHitTesting(false)
+                                    }
                                 .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 5)
                             
                             Text(langManager.text(for: "subtitle"))
-                                .font(.subheadline)
-                                .fontWeight(.bold)
-                                .foregroundColor(.white.opacity(0.9))
-                                .padding(.horizontal, 20)
-                                .padding(.vertical, 8)
-                                .background(.white.opacity(0.12), in: Capsule())
-                                .overlay(
-                                    Capsule().stroke(Color.white.opacity(0.2), lineWidth: 1)
-                                )
+                                .font(.footnote)
+                                .foregroundColor(.white.opacity(0.75))
+                                .multilineTextAlignment(.center)
+                                .lineSpacing(4)
+                                .padding(.horizontal, 32)
                         }
-                        .offset(y: appearAnimation ? 0 : 20)
+                        .offset(y: appearAnimation ? -40 : -20)
                         .opacity(appearAnimation ? 1.0 : 0)
                     }
                     
