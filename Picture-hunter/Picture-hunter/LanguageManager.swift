@@ -27,7 +27,7 @@ class LanguageManager: ObservableObject {
     
     private let japaneseDictionary: [String: String] = [
         "app_title": "PICTURE HUNTER",
-        "subtitle": "日専祭",
+        "subtitle": "クローズアウトしていく画像から答えをすばやく推測！\nわかった瞬間にすぐ回答して高得点を狙おう！",
         "tap_to_start": "画面をタップしてスタート",
         "start": "スタート",
         "ranking": "ランキング",
@@ -78,7 +78,7 @@ class LanguageManager: ObservableObject {
     
     private let englishDictionary: [String: String] = [
         "app_title": "PICTURE HUNTER",
-        "subtitle": "School Festival",
+        "subtitle": "Guess the answer fast as the photo zooms out!\nAnswer the moment you know it and aim for a high score!",
         "tap_to_start": "Tap to Start",
         "start": "START",
         "ranking": "RANKING",
@@ -130,7 +130,7 @@ class LanguageManager: ObservableObject {
     
     private let myanmarDictionary: [String: String] = [
         "app_title": "PICTURE HUNTER",
-        "subtitle": "ကျောင်းပွဲတော်",
+        "subtitle": "ဓာတ်ပုံ ဖြည်းဖြည်းချင်း ကျယ်လာတာကို ကြည့်ပြီး အဖြေကို အမြန်ခန့်မှန်းပါ!\nသိတာနဲ့ ချက်ချင်းဖြေပြီး ရမှတ်မြင့်မြင့် ရအောင် ကြိုးစားပါ!",
         "tap_to_start": "စတင်ရန် နှိပ်ပါ",
         "start": "စတင်မည်",
         "ranking": "အဆင့်သတ်မှတ်ချက်",
