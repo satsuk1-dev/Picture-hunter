@@ -35,14 +35,15 @@ struct GameView: View {
                 endPoint: .bottom
             )
             .ignoresSafeArea()
+            .onTapGesture {
+                isInputFocused = false   // 空いている所をタップするとキーボードが閉じる
+            }
             
             VStack(spacing: 16) {
-
                 
-                // 1. Header — Found images + 60s timer
                 // 1. Header — Back + Found images + 60s timer
                 HStack(spacing: 10) {
-                    // 変更後
+                    // 戻るボタン
                     Button(action: exitGame) {
                         Image(systemName: "chevron.left")
                             .font(.title3.weight(.semibold))
@@ -55,7 +56,6 @@ struct GameView: View {
                     .buttonStyle(.plain)
                     
                     // 正解枚数
-
                     HStack(spacing: 8) {
                         Image(systemName: "photo.stack.fill")
                             .foregroundColor(.green)
@@ -73,6 +73,7 @@ struct GameView: View {
                     
                     Spacer()
                     
+                    // 残り時間
                     HStack(spacing: 6) {
                         Image(systemName: "clock.fill")
                             .foregroundColor(gameModel.globalTimeRemaining <= 10 ? .red : .orange)
@@ -89,7 +90,6 @@ struct GameView: View {
                 }
                 .padding(.horizontal)
                 .padding(.top, 10)
-
                 
                 Spacer()
                 
@@ -101,49 +101,77 @@ struct GameView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 16)
                 
-                // Photo Area
-                ZStack {
-                    RoundedRectangle(cornerRadius: 24)
-                        .fill(Color(white: 0.2))
-                        .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 5)
+                // Photo Area(画面の幅に合わせて正方形。入力中は小さくなる)
+                Color.clear
+                    .aspectRatio(1, contentMode: .fit)
+                    .overlay {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 24)
+                                .fill(Color(white: 0.2))
+                                .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 5)
+                            
+                            RoundedRectangle(cornerRadius: 24)
+                                .stroke(
+                                    LinearGradient(
+                                        colors: [.blue, .purple],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    ),
+                                    lineWidth: 3
+                                )
+                            
+                            if let question = gameModel.currentQuestion {
+                                Image(question.imageName)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .scaleEffect(gameModel.currentZoomScale)
+                                    .animation(.linear(duration: 0.1), value: gameModel.currentZoomScale)
+                            } else {
+                                Image(systemName: "photo")
+                                    .font(.system(size: 80))
+                                    .foregroundColor(.gray)
+                            }
+                        }
+                    }
+                    .clipShape(RoundedRectangle(cornerRadius: 24))
+                    .allowsHitTesting(false)   // 戻るボタンが1回で反応するために必要
+                    .frame(maxWidth: isInputFocused ? 260 : 340)
+                    .padding(.horizontal, 20)
+                    .animation(.easeInOut(duration: 0.25), value: isInputFocused)
+                
+                // Skip & Pause(写真の下)
+                HStack(spacing: 20) {
+                    Button(action: {
+                        gameModel.skipQuestion()
+                        inputAnswer = ""
+                    }) {
+                        Text("パス (Skip)")
+                            .font(.headline)
+                            .fontWeight(.bold)
+                            .foregroundColor(.orange)
+                            .padding(.vertical, 12)
+                            .padding(.horizontal, 22)
+                            .background(Color.orange.opacity(0.2))
+                            .cornerRadius(12)
+                    }
                     
-                    RoundedRectangle(cornerRadius: 24)
-                        .stroke(
-                            LinearGradient(
-                                colors: [.blue, .purple],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            ),
-                            lineWidth: 3
-                        )
-                    
-                    if let question = gameModel.currentQuestion {
-                        Image(question.imageName)
-                            .resizable()
-                            .scaledToFill()
-                            .scaleEffect(gameModel.currentZoomScale)
-                            .animation(.linear(duration: 0.1), value: gameModel.currentZoomScale)
-                    } else {
-                        Image(systemName: "photo")
-                            .font(.system(size: 80))
-                            .foregroundColor(.gray)
+                    Button(action: {
+                        if gameModel.isPlaying {
+                            gameModel.stopGame()
+                        } else {
+                            gameModel.setupAndStartGame(category: category)
+                        }
+                    }) {
+                        Text(gameModel.isPlaying ? langManager.text(for: "pause") : langManager.text(for: "resume"))
+                            .font(.headline)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white.opacity(0.8))
+                            .padding(.vertical, 12)
+                            .padding(.horizontal, 22)
+                            .background(Color.white.opacity(0.1))
+                            .cornerRadius(12)
                     }
                 }
-                .frame(width: 340, height: 340)
-                .cornerRadius(24)
-                .clipped()
-                .allowsHitTesting(false)
-                
-                // デバッグ用:答えを表示
-                #if DEBUG
-                if let question = gameModel.currentQuestion {
-                    Text("答え: " + question.allAnswers.joined(separator: " / "))
-                        .font(.caption)
-                        .foregroundColor(.yellow)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 16)
-                }
-                #endif
                 
                 // Feedback
                 if let isCorrect = gameModel.isCorrectAnswer {
@@ -157,96 +185,51 @@ struct GameView: View {
                         .font(.title2)
                 }
                 
+//                // デバッグ用:答えを表示(リリース版には出ません)
+//                #if DEBUG
+//                if let question = gameModel.currentQuestion {
+//                    Text("答え: " + question.allAnswers.joined(separator: " / "))
+//                        .font(.caption)
+//                        .foregroundColor(.yellow)
+//                        .multilineTextAlignment(.center)
+//                        .padding(.horizontal, 16)
+//                }
+//                #endif
+                
                 Spacer()
                 
-                // Input & Controls
-                VStack(spacing: 12) {
-                    HStack(spacing: 10) {
-                        TextField(langManager.text(for: "type_answer"), text: $inputAnswer)
-                            .focused($isInputFocused)
-                            .padding()
-                            .background(Color(white: 0.2))
-                            .cornerRadius(12)
-                            .foregroundColor(.white)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(Color.white.opacity(0.3), lineWidth: 1)
-                            )
-                            .autocapitalization(.none)
-                            .disableAutocorrection(true)
-                            .onSubmit {
-                                submitAnswer()
-                            }
-                        
-                        Button(action: {
+                // Input
+                HStack(spacing: 10) {
+                    TextField(langManager.text(for: "type_answer"), text: $inputAnswer)
+                        .focused($isInputFocused)
+                        .padding()
+                        .background(Color(white: 0.2))
+                        .cornerRadius(12)
+                        .foregroundColor(.white)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                        )
+                        .autocapitalization(.none)
+                        .disableAutocorrection(true)
+                        .onSubmit {
                             submitAnswer()
-                        }) {
-                            Image(systemName: "paperplane.fill")
-                                .font(.title3)
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(inputAnswer.isEmpty ? Color.gray : Color.blue)
-                                .cornerRadius(12)
                         }
-                        .disabled(inputAnswer.isEmpty)
-                    }
                     
-                    HStack(spacing: 20) {
-                        Button(action: {
-                            gameModel.skipQuestion()
-                            inputAnswer = ""
-                        }) {
-                            Text("パス (Skip)")
-                                .font(.subheadline)
-                                .fontWeight(.bold)
-                                .foregroundColor(.orange)
-                                .padding(.vertical, 8)
-                                .padding(.horizontal, 16)
-                                .background(Color.orange.opacity(0.2))
-                                .cornerRadius(10)
-                        }
-                        
-                        Button(action: {
-                            if gameModel.isPlaying {
-                                gameModel.stopGame()
-                            } else {
-                                gameModel.setupAndStartGame(category: category)
-                            }
-                        }) {
-                            Text(gameModel.isPlaying ? langManager.text(for: "pause") : langManager.text(for: "resume"))
-                                .font(.subheadline)
-                                .fontWeight(.bold)
-                                .foregroundColor(.white.opacity(0.8))
-                                .padding(.vertical, 8)
-                        }
+                    Button(action: {
+                        submitAnswer()
+                    }) {
+                        Image(systemName: "paperplane.fill")
+                            .font(.title3)
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(inputAnswer.isEmpty ? Color.gray : Color.blue)
+                            .cornerRadius(12)
                     }
+                    .disabled(inputAnswer.isEmpty)
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 20)
-            }
-        }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                HStack {
-                    Text("入力中:")
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                    
-                    Text(inputAnswer.isEmpty ? "..." : inputAnswer)
-                        .font(.body)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                    
-                    Spacer()
-                    
-                    Button("OK") {
-                        submitAnswer()
-                        isInputFocused = false
-                    }
-                    .fontWeight(.bold)
-                    .foregroundColor(.blue)
-                }
-                .padding(.horizontal, 8)
             }
         }
         .toolbar(.hidden, for: .navigationBar)
@@ -307,4 +290,10 @@ struct GameView: View {
             dismiss()
         }
     }
+}
+
+#Preview {
+    GameView(category: .school)
+        .environmentObject(LanguageManager())
+        .environmentObject(ScoreManager())
 }
