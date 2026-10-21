@@ -8,8 +8,6 @@ struct RankingView: View {
     var initialCategory: String = "世界"
     @State private var selectedCategory = "世界"
     @State private var showResetAlert = false
-    
-    // Correspondance entre la clé de langue et la catégorie de stockage
     private let categoryKeys: [(key: String, storageValue: String)] = [
         ("mode_world", "世界"),
         ("mode_school", "学校"),
