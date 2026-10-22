@@ -5,7 +5,9 @@ struct GameView: View {
     @EnvironmentObject var langManager: LanguageManager
     @EnvironmentObject var scoreManager: ScoreManager
     @Environment(\.dismiss) var dismiss
-    
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
     let category: GameCategory
     var onExit: (() -> Void)? = nil
     @StateObject private var gameModel = GameModel()
@@ -13,9 +15,9 @@ struct GameView: View {
     @State private var playerName: String = ""
     @State private var showNameInputDialog = false
     @State private var showTotalScoreView = false
-    
+
     @FocusState private var isInputFocused: Bool
-    
+
     private var questionPromptKey: String {
         switch category {
         case .school:
@@ -27,6 +29,26 @@ struct GameView: View {
         }
     }
     
+    private func computedImageMaxWidth() -> CGFloat {
+        let isCompactVert = verticalSizeClass == .compact
+        
+        let screenHeight = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first?.screen.bounds.height ?? 0
+
+        if isInputFocused {
+            if screenHeight <= 667 {
+                return 280
+            }
+            return isCompactVert ? 240 : 300
+        } else {
+            if screenHeight <= 667 {
+                return 330
+            }
+            return isCompactVert ? 300 : 360
+        }
+    }
+
     var body: some View {
         ZStack {
             LinearGradient(
@@ -36,72 +58,71 @@ struct GameView: View {
             )
             .ignoresSafeArea()
             .onTapGesture {
-                isInputFocused = false   // 空いている所をタップするとキーボードが閉じる
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    isInputFocused = false
+                }
             }
-            
-            VStack(spacing: 16) {
-                
-                // 1. Header — Back + Found images + 60s timer
+
+            VStack(spacing: isInputFocused ? 2 : 14) {
+
+                // 1. Header
                 HStack(spacing: 10) {
-                    // 戻るボタン
                     Button(action: exitGame) {
                         Image(systemName: "chevron.left")
                             .font(.title3.weight(.semibold))
                             .foregroundColor(.white)
-                            .frame(width: 48, height: 48)
+                            .frame(width: 44, height: 44)
                             .background(Color.white.opacity(0.1))
                             .clipShape(Circle())
                             .contentShape(Circle())
                     }
                     .buttonStyle(.plain)
-                    
-                    // 正解枚数
+
                     HStack(spacing: 8) {
                         Image(systemName: "photo.stack.fill")
                             .foregroundColor(.green)
-                            .font(.title3)
-                        
+                            .font(.subheadline)
+
                         Text("\(gameModel.correctCount) 枚")
-                            .font(.system(.title2, design: .rounded))
+                            .font(.system(.headline, design: .rounded))
                             .fontWeight(.bold)
                             .foregroundColor(.white)
                     }
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
                     .background(Color.white.opacity(0.1))
-                    .cornerRadius(12)
-                    
+                    .cornerRadius(10)
+
                     Spacer()
-                    
-                    // 残り時間
+
                     HStack(spacing: 6) {
                         Image(systemName: "clock.fill")
                             .foregroundColor(gameModel.globalTimeRemaining <= 10 ? .red : .orange)
-                        
+
                         Text("\(gameModel.globalTimeRemaining)s")
-                            .font(.system(.title2, design: .monospaced))
+                            .font(.system(.headline, design: .monospaced))
                             .fontWeight(.bold)
                             .foregroundColor(gameModel.globalTimeRemaining <= 10 ? .red : .orange)
                     }
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
                     .background(Color.white.opacity(0.1))
-                    .cornerRadius(12)
+                    .cornerRadius(10)
                 }
                 .padding(.horizontal)
-                .padding(.top, 10)
-                
-                Spacer()
-                
+                .padding(.top, 6)
+
+                Spacer(minLength: isInputFocused ? 0 : 12)
+
                 // Question Header
                 Text(langManager.text(for: questionPromptKey))
-                    .font(.system(.title3, design: .rounded))
+                    .font(.system(isInputFocused ? .subheadline : .title3, design: .rounded))
                     .fontWeight(.bold)
                     .foregroundColor(.white)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 16)
-                
-                // Photo Area(画面の幅に合わせて正方形。入力中は小さくなる)
+
+                // Photo Area
                 Color.clear
                     .aspectRatio(1, contentMode: .fit)
                     .overlay {
@@ -109,7 +130,7 @@ struct GameView: View {
                             RoundedRectangle(cornerRadius: 24)
                                 .fill(Color(white: 0.2))
                                 .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 5)
-                            
+
                             RoundedRectangle(cornerRadius: 24)
                                 .stroke(
                                     LinearGradient(
@@ -119,7 +140,7 @@ struct GameView: View {
                                     ),
                                     lineWidth: 3
                                 )
-                            
+
                             if let question = gameModel.currentQuestion {
                                 Image(question.imageName)
                                     .resizable()
@@ -128,33 +149,32 @@ struct GameView: View {
                                     .animation(.linear(duration: 0.1), value: gameModel.currentZoomScale)
                             } else {
                                 Image(systemName: "photo")
-                                    .font(.system(size: 80))
+                                    .font(.system(size: 70))
                                     .foregroundColor(.gray)
                             }
                         }
                     }
                     .clipShape(RoundedRectangle(cornerRadius: 24))
-                    .allowsHitTesting(false)   // 戻るボタンが1回で反応するために必要
-                    .frame(maxWidth: isInputFocused ? 260 : 340)
-                    .padding(.horizontal, 20)
-                    .animation(.easeInOut(duration: 0.25), value: isInputFocused)
-                
-                // Skip & Pause(写真の下)
-                HStack(spacing: 20) {
+                    .allowsHitTesting(false)
+                    .frame(maxWidth: computedImageMaxWidth())
+                    .padding(.horizontal, 16)
+
+                // Skip & Pause
+                HStack(spacing: 16) {
                     Button(action: {
                         gameModel.skipQuestion()
                         inputAnswer = ""
                     }) {
                         Text("パス (Skip)")
-                            .font(.headline)
+                            .font(.subheadline)
                             .fontWeight(.bold)
                             .foregroundColor(.orange)
-                            .padding(.vertical, 12)
-                            .padding(.horizontal, 22)
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 18)
                             .background(Color.orange.opacity(0.2))
                             .cornerRadius(12)
                     }
-                    
+
                     Button(action: {
                         if gameModel.isPlaying {
                             gameModel.stopGame()
@@ -163,46 +183,35 @@ struct GameView: View {
                         }
                     }) {
                         Text(gameModel.isPlaying ? langManager.text(for: "pause") : langManager.text(for: "resume"))
-                            .font(.headline)
+                            .font(.subheadline)
                             .fontWeight(.bold)
                             .foregroundColor(.white.opacity(0.8))
-                            .padding(.vertical, 12)
-                            .padding(.horizontal, 22)
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 18)
                             .background(Color.white.opacity(0.1))
                             .cornerRadius(12)
                     }
                 }
-                
+
                 // Feedback
                 if let isCorrect = gameModel.isCorrectAnswer {
                     Text(isCorrect ? langManager.text(for: "correct") : langManager.text(for: "incorrect"))
-                        .font(.title2)
+                        .font(.headline)
                         .fontWeight(.bold)
                         .foregroundColor(isCorrect ? .green : .red)
                         .transition(.scale)
                 } else {
                     Text("")
-                        .font(.title2)
+                        .font(.headline)
                 }
-                
-//                // デバッグ用:答えを表示(リリース版には出ません)
-//                #if DEBUG
-//                if let question = gameModel.currentQuestion {
-//                    Text("答え: " + question.allAnswers.joined(separator: " / "))
-//                        .font(.caption)
-//                        .foregroundColor(.yellow)
-//                        .multilineTextAlignment(.center)
-//                        .padding(.horizontal, 16)
-//                }
-//                #endif
-                
-                Spacer()
-                
-                // Input
+
+                Spacer(minLength: isInputFocused ? 0 : 12)
+
+                // Input Area
                 HStack(spacing: 10) {
                     TextField(langManager.text(for: "type_answer"), text: $inputAnswer)
                         .focused($isInputFocused)
-                        .padding()
+                        .padding(12)
                         .background(Color(white: 0.2))
                         .cornerRadius(12)
                         .foregroundColor(.white)
@@ -215,22 +224,23 @@ struct GameView: View {
                         .onSubmit {
                             submitAnswer()
                         }
-                    
+
                     Button(action: {
                         submitAnswer()
                     }) {
                         Image(systemName: "paperplane.fill")
-                            .font(.title3)
+                            .font(.body)
                             .foregroundColor(.white)
-                            .padding()
+                            .padding(12)
                             .background(inputAnswer.isEmpty ? Color.gray : Color.blue)
                             .cornerRadius(12)
                     }
                     .disabled(inputAnswer.isEmpty)
                 }
                 .padding(.horizontal)
-                .padding(.bottom, 20)
+                .padding(.bottom, 12)
             }
+            .animation(.easeInOut(duration: 0.3), value: isInputFocused)
         }
         .toolbar(.hidden, for: .navigationBar)
         .onAppear {
@@ -251,7 +261,7 @@ struct GameView: View {
                 let nameToSave = playerName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                     ? "Player"
                     : playerName
-                
+
                 scoreManager.addScore(name: nameToSave, score: gameModel.correctCount, category: category.rawValue)
                 playerName = ""
                 showTotalScoreView = true
@@ -274,15 +284,17 @@ struct GameView: View {
             )
         }
     }
-    
+
     private func submitAnswer() {
         guard !inputAnswer.isEmpty else { return }
         let _ = gameModel.checkAnswer(inputAnswer)
         inputAnswer = ""
     }
-    
+
     private func exitGame() {
-        isInputFocused = false
+        withAnimation(.easeInOut(duration: 0.3)) {
+            isInputFocused = false
+        }
         gameModel.stopGame()
         if let onExit {
             onExit()
