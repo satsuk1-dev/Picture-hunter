@@ -176,8 +176,10 @@ struct TotalscoreView: View {
             .padding(24)
         }
         .alert(langManager.text(for: "delete_ranking_title"), isPresented: $showResetAlert) {
-            Button(langManager.text(for: "delete_all_rankings"), role: .destructive) {
-                scoreManager.resetAllScores()
+            Button(langManager.text(for: "delete_last_score"), role: .destructive) {
+                scoreManager.removeLastScore(score: score)
+                dismiss()
+                onHome()
             }
             Button(langManager.text(for: "cancel"), role: .cancel) {}
         } message: {

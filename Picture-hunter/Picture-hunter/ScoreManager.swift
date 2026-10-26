@@ -6,7 +6,7 @@ struct RankingItem: Identifiable, Codable {
     var id = UUID()
     let name: String
     let score: Int
-    let category: String 
+    let category: String
     let date: Date
 }
 
@@ -23,12 +23,10 @@ class ScoreManager: ObservableObject {
         if let data = UserDefaults.standard.data(forKey: saveKey),
            let decoded = try? JSONDecoder().decode([RankingItem].self, from: data) {
             let calendar = Calendar.current
-            // Conservons uniquement les données enregistrées aujourd'hui
             self.highScores = decoded.filter { calendar.isDateInToday($0.date) }
         }
     }
     
-    /// Filtrage strict par catégorie sélectionnée
     func scores(for category: String) -> [RankingItem] {
         let calendar = Calendar.current
         return highScores
@@ -36,26 +34,34 @@ class ScoreManager: ObservableObject {
             .sorted { $0.score > $1.score }
     }
     
-    /// Ajout d'un score avec sa catégorie explicite
     func addScore(name: String, score: Int, category: String) {
         let newEntry = RankingItem(name: name, score: score, category: category, date: Date())
         highScores.append(newEntry)
-        
-        let calendar = Calendar.current
-        highScores = highScores
-            .filter { calendar.isDateInToday($0.date) }
-            .sorted { $0.score > $1.score }
-        
         saveScores()
     }
     
-    /// Réinitialise une seule catégorie
+    func removeLastScore() {
+        guard let latestItem = highScores.max(by: { $0.date < $1.date }) else { return }
+        highScores.removeAll { $0.id == latestItem.id }
+        saveScores()
+    }
+    
+    func removeLastScore(score: Int, category: String? = nil) {
+        if let index = highScores.lastIndex(where: {
+            $0.score == score && (category == nil || $0.category == category)
+        }) {
+            highScores.remove(at: index)
+            saveScores()
+        } else {
+            removeLastScore()
+        }
+    }
+    
     func resetScores(for category: String) {
         highScores.removeAll { $0.category == category }
         saveScores()
     }
     
-    /// Réinitialise TOUS les scores
     func resetAllScores() {
         highScores.removeAll()
         UserDefaults.standard.removeObject(forKey: saveKey)

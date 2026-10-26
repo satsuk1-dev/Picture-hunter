@@ -69,8 +69,10 @@ class LanguageManager: ObservableObject {
         "save_button": "登録",
         
         // --- Poubelle / Clean Scores (3 Langues) ---
-        "delete_ranking_title": "ランキングの削除",
-        "delete_ranking_message": "削除するデータの範囲を選択してください。",
+        "delete_ranking_title": "スコアの削除",
+        "delete_ranking_message": "今回のスコアを削除しますか？",
+        "delete_last_score": "このスコアを削除",
+        "do_not_save_score": "スコアを保存しない",
         "delete_this_category": "このカテゴリのみ削除",
         "delete_all_rankings": "すべてのランキングを削除",
         "cancel": "キャンセル"
@@ -121,8 +123,10 @@ class LanguageManager: ObservableObject {
         "save_button": "Save",
         
         // --- Poubelle / Clean Scores (3 Langues) ---
-        "delete_ranking_title": "Delete Ranking",
-        "delete_ranking_message": "Please select the range of data to delete.",
+        "delete_ranking_title": "Delete Score",
+        "delete_ranking_message": "Do you want to delete this game's score?",
+        "delete_last_score": "Delete this score",
+        "do_not_save_score": "Don't save score",
         "delete_this_category": "Delete only this category",
         "delete_all_rankings": "Delete all rankings",
         "cancel": "Cancel"
@@ -173,8 +177,10 @@ class LanguageManager: ObservableObject {
         "save_button": "သိမ်းမည်",
         
         // --- Poubelle / Clean Scores (3 Langues) ---
-        "delete_ranking_title": "အဆင့်သတ်မှတ်ချက် ဖျက်မည်",
-        "delete_ranking_message": "ဖျက်လိုသော အချက်အလက်အမျိုးအစားကို ရွေးချယ်ပါ",
+        "delete_ranking_title": "ရမှတ် ဖျက်မည်",
+        "delete_ranking_message": "ယခုပွဲ၏ ရမှတ်ကို ဖျက်လိုပါသလား။",
+        "delete_last_score": "ဒီရမှတ်ကို ဖျက်မည်",
+        "do_not_save_score": "ရမှတ် မသိမ်းပါ",
         "delete_this_category": "ဒီကဏ္ဍတစ်ခုတည်းကိုသာ ဖျက်မည်",
         "delete_all_rankings": "အဆင့်သတ်မှတ်ချက်အားလုံး ဖျက်မည်",
         "cancel": "မလုပ်တော့ပါ"
