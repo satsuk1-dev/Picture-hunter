@@ -112,8 +112,23 @@ class GameModel: ObservableObject {
                      answerJa: ["12", "12号館", "１２号館", "十二号館", "じゅうにごうかん", "ジュウニゴウカン", "12gokan", "12 gokan"],
                      answerEn: ["building 12", "building12", "12", "no 12", "no.12"],
                      answerMy: ["၁၂", "အဆောက်အအုံ ၁၂"]),
+
+            Question(
+                imageName: "school_communication_space",
+                category: .school,
+                answerJa: ["コミュニケーションスペース", "こみゅနီけーしょんすぺーす", "2号館食堂", "フリースペース", "ラウンジ", "休憩所", "食堂"],
+                answerEn: ["communication space", "lounge", "common area", "cafeteria", "building 2"],
+                answerMy: ["မုန့်စားဆောင်"]
+            ),
+            
+            Question(
+                imageName: "school_license_center",
+                category: .school,
+                answerJa: ["ライセンスセンター", "らいせんすせんたー", "証明書発行機", "証紙", "窓口"],
+                answerEn: ["license center", "certificate machine", "ticket machine", "office"],
+                answerMy: ["လက်မှတ်ထုတ်ပေးရေးစင်တာ"]
+            ),
                      
-            // --- MODE WORLD ---
             // --- MODE WORLD ---
             Question(imageName: "world_eiffel_tower", category: .world,
                      answerJa: ["フランス", "ふらんす"],
