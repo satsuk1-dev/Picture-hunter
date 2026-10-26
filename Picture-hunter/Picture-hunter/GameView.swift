@@ -247,10 +247,10 @@ struct GameView: View {
             inputAnswer = ""
             gameModel.setupAndStartGame(category: category)
         }
-        .onChange(of: gameModel.currentIndex) { oldValue, newValue in
+        .onChange(of: gameModel.currentIndex) { newValue in
             inputAnswer = ""
         }
-        .onChange(of: gameModel.isGameOver) { oldValue, newValue in
+        .onChange(of: gameModel.isGameOver) { newValue in
             if newValue {
                 showNameInputDialog = true
             }
