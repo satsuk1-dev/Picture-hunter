@@ -174,6 +174,29 @@ class GameModel: ObservableObject {
                      answerJa: ["スイス", "すいす"],
                      answerEn: ["switzerland", "Switzerland"],
                      answerMy: ["ဆူဇာလန်"]),
+            Question(imageName: "world_mexico", category: .world,
+                    answerJa: ["メキシコ", "めきしこ", "チチェン・イッツァ", "チチェンイッツァ"],
+                    answerEn: ["mexico", "Mexico", "chichen itza"],
+                    answerMy: ["မက္ကဆီကို"]),
+            Question(imageName: "world_korea", category: .world,
+                    answerJa: ["韓国", "かんこく", "ソウル", "景福宮", "けいふくきゅう", "ビビンバ", "びびんば"],
+                    answerEn: ["korea", "south korea", "seoul", "bibimbap"],
+                    answerMy: ["ကိုရီးယား"]),
+            Question(imageName: "world_thai", category: .world,
+                    answerJa: ["タイ", "たい", "バンコク", "ワットアルン", "ワット・アルン"],
+                    answerEn: ["thailand", "Thailand", "bangkok", "wat arun"],
+                    answerMy: ["ထိုင်း"]),
+            Question(imageName: "world_germany", category: .world,
+                    answerJa: ["ドイツ", "どいつ", "ブランデンブルク門", "ノイシュヴァンシュタイン城"],
+                    answerEn: ["germany", "Germany", "brandenburg gate"],
+                    answerMy: ["ဂျာမနီ"]),
+            Question(
+                imageName: "world_ivory_coast",
+                category: .world,
+                answerJa: ["コートジボワール", "こーとじぼわーる", "アビジャン", "あびじゃん"],
+                answerEn: ["ivory coast", "Ivory Coast", "cote d'ivoire", "Cote d'Ivoire", "abidjan"],
+                answerMy: ["ကို့ဒီဗွား"]),
+            
                      
             // --- MODE HALLOWEEN ---
             Question(imageName: "halloween_jacko", category: .halloween,
@@ -235,7 +258,7 @@ class GameModel: ObservableObject {
             Question(imageName: "halloween_broom", category: .halloween,
                      answerJa: ["ほうき", "ホウキ", "箒"],
                      answerEn: ["broom", "broomstick"],
-                     answerMy: ["တံမြက်စည်း"])
+                     answerMy: ["တံမြက်စည်း"]),
         ]
     }
     
