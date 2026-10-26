@@ -32,7 +32,7 @@ class GameModel: ObservableObject {
     @Published var currentZoomScale: CGFloat = 5.0
     
     @Published var totalScore: Int = 0          
-    @Published var globalTimeRemaining: Int = 60 // 60 secondes
+    @Published var globalTimeRemaining: Int = 30 // 30 secondes
     @Published var correctCount: Int = 0        // Nombre d'images trouvées
     
     @Published var isPlaying: Bool = false
